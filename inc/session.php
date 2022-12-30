@@ -1,0 +1,52 @@
+<?php
+include('database.php');
+
+if (session_status() !== PHP_SESSION_NONE) {
+    return;
+}
+
+session_start();
+
+/* --- VARIABILI GLOBALI --- */
+$id_session = '';
+$is_logado_session = false;
+$id_usuario_session = 0; // Mi serve per aggiornare ogni volta i dati dell'utente (in caso di cambiamento)
+$email_session = '';
+$username_session = '';
+$token_session = '';
+$tipologia_session = '';
+$rol_session = '';
+
+if (isset($_SESSION['id_usuario']) && isset($_SESSION['is_logado'])) {
+    if ($_SESSION['id_usuario'] > 0 && $_SESSION['is_logado'] === true) {
+        session_regenerate_id();
+        $_SESSION['id'] = $id_session = session_id(); // controla si tengp permisos para acceder a la pagina
+        $_SESSION['token'] = $token_session = bin2hex(openssl_random_pseudo_bytes(16)); // para formularios
+        $_SESSION['is_logado'] = $is_logado_session = true;
+        $id_usuario_session = $_SESSION['id_usuario'];
+        $sql = "SELECT email, username, tipologia FROM usuario WHERE id = $id_usuario_session";
+        $loop = mysqli_query($dbDentalPro, $sql);
+        while ($row = mysqli_fetch_assoc($loop)) {
+            $email_session = $row["email"];
+            $username_session = $row["username"];
+            $tipologia_session = $row["tipologia"];
+        }
+
+        // TODO: control sobre la tipologia y rol 
+
+        // se actualizan los valores de session
+
+    } else {
+        $_SESSION['is_logado'] = $is_logado_session = false;
+        $_SESSION['id_usuario'] = $id_usuario_session = 0;
+        session_unset();
+        echo "el id es 0 o  el login es false";
+    }
+} else {
+    $_SESSION['is_logado'] = $is_logado_session = false;
+    $_SESSION['id_usuario'] = $id_usuario_session = 0;
+    session_unset();
+    echo "la sesion no esta definida";
+}
+
+session_write_close();
