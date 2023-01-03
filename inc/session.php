@@ -24,29 +24,23 @@ if (isset($_SESSION['id_usuario']) && isset($_SESSION['is_logado'])) {
         $_SESSION['token'] = $token_session = bin2hex(openssl_random_pseudo_bytes(16)); // para formularios
         $_SESSION['is_logado'] = $is_logado_session = true;
         $id_usuario_session = $_SESSION['id_usuario'];
-        $sql = "SELECT email, username, tipologia FROM usuario WHERE id = $id_usuario_session";
+        $sql = "SELECT email, username, tipologia, rol FROM usuario WHERE id = $id_usuario_session";
         $loop = mysqli_query($dbDentalPro, $sql);
         while ($row = mysqli_fetch_assoc($loop)) {
-            $email_session = $row["email"];
-            $username_session = $row["username"];
-            $tipologia_session = $row["tipologia"];
+            $email_session = $row['email'];
+            $username_session = strtolower($row['username']);
+            $tipologia_session = strtolower($row['tipologia']);
+            $rol_session = $row['rol'];
         }
-
-        // TODO: control sobre la tipologia y rol 
-
-        // se actualizan los valores de session
-
     } else {
         $_SESSION['is_logado'] = $is_logado_session = false;
         $_SESSION['id_usuario'] = $id_usuario_session = 0;
         session_unset();
-        echo "el id es 0 o  el login es false";
     }
 } else {
     $_SESSION['is_logado'] = $is_logado_session = false;
     $_SESSION['id_usuario'] = $id_usuario_session = 0;
     session_unset();
-    echo "la sesion no esta definida";
 }
 
 session_write_close();

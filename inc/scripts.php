@@ -7,3 +7,9 @@
 
 <!-- JQuery alert -->
 <script src="js/jquery-confirm.min.js"></script> 
+
+<!-- DataTables -->
+<script src="js/jquery.dataTables.min.js"></script> 
+
+<!-- popper -->
+<script src="js/popper.js"></script>
