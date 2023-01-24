@@ -7,8 +7,8 @@ $operacion = $_POST['operacion'] ?? '';
 
 switch ($operacion) {
     case 'login':
-        $username = limpiar_texto($_POST['username'] ?? '');
-        $password = limpiar_texto($_POST['password'] ?? '');
+        $username = limpiarTexto($_POST['username'] ?? '');
+        $password = limpiarTexto($_POST['password'] ?? '');
 
         if (empty($username) || empty($password)) {
             error('datos incorrectos');
@@ -31,6 +31,7 @@ switch ($operacion) {
             }
             $_SESSION["is_logado"] = true;
             $_SESSION["id_usuario"] = $idUsuario;
+            $_SESSION["ip_usuario"] = getIp();
 
             $username = "";
             $email = "";

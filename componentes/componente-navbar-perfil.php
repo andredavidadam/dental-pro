@@ -6,33 +6,40 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <!-- lo hacemos bien -->
                 <?php
-                if ($tipologia_session === Tipologia::Rainweb) {
+                switch ($tipologia_session) {
+                    case Tipologia::Rainweb:
                 ?>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Menu
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="visualiza-log.php">Visualiza Log</a></li>
-                            <!-- <hr class="dropdown-divider"> -->
-                        </ul>
-                    </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Menu
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="visualiza-log.php">Visualiza Log</a></li>
+                                <!-- <hr class="dropdown-divider"> -->
+                                <li><a class="dropdown-item" href="visualiza-perfil.php">Mi Perfil</a></li>
+                            </ul>
+                        </li>
+                    <?php
+                        break;
+                    case Tipologia::DentalPro:
+                    ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Mis Pacientes
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#">Agenda</a></li>
+                                <!-- <hr class="dropdown-divider"> -->
+                                <li><a class="dropdown-item" href="visualiza-perfil.php">Mi Perfil</a></li>
+                            </ul>
+                        </li>
                 <?php
-                } else if ($tipologia_session === Tipologia::DentalPro) {
-                ?>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Mis Pacientes
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Agenda</a></li>
-                            <!-- <hr class="dropdown-divider"> -->
-                        </ul>
-                    </li>
-                <?php
+                        break;
                 }
                 ?>
+
             </ul>
 
             <div class="dropdown">
@@ -45,6 +52,7 @@
                     echo '<li><a class="dropdown-item text-danger fw-bold" onclick="Logout()" href="#">Logout</a></li>';
 
                     if (1 === 1) {
+                        echo "<li><a class='dropdown-item fw-bold' href='#'>ip_session = $ip_session</a></li>";
                         echo "<li><a class='dropdown-item fw-bold' href='#'>id_session = $id_session</a></li>";
                         echo "<li><a class='dropdown-item fw-bold' href='#'>is_logado = $is_logado_session</a></li>";
                         echo "<li><a class='dropdown-item fw-bold' href='#'>id_usuario = $id_usuario_session</a></li>";

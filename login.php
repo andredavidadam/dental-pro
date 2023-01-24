@@ -7,13 +7,6 @@ include('inc/head.php');
 include('inc/scripts.php');
 include('inc/utility.php');
 
-stampa($_SESSION);
-
-
-if ($is_logado_session === true) {
-    echo "<script>window.location.href = 'dashboard.php';</script>";
-    return;
-}
 ?>
 
 <body>
@@ -48,7 +41,6 @@ if ($is_logado_session === true) {
             let pulsanteLogin = $("#pulsante-login");
 
             pulsanteLogin.on("click", function(e) {
-                e.preventDefault();
                 login()
             });
 
@@ -71,7 +63,7 @@ if ($is_logado_session === true) {
                     if (json['status'] == 'success') {
                         window.location.href = "dashboard.php";
                     } else {
-                        alert(json['mensaje']);
+                        //alert(json['mensaje']);
                     }
                 });
                 return;

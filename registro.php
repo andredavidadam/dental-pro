@@ -7,7 +7,7 @@ include("inc/head.php");
 include("inc/scripts.php");
 include("inc/utility.php");
 
-if ($is_logado_session === true) {
+if ($is_logado_session === true && $tipologia_session!==Tipologia::Rainweb) {
     echo "<script>window.location.href = 'dashboard.php';</script>";
     return;
 }

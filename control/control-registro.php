@@ -5,16 +5,16 @@ include("../inc/database.php");
 
 
 
-$operacion = limpiar_texto($_POST['operacion'] ?? '');
+$operacion = limpiarTexto($_POST['operacion'] ?? '');
 
 switch ($operacion) {
     case 'registro':
-        $nombre = limpiar_texto($_POST['nombre'] ?? '');
-        $apellido = limpiar_texto($_POST['apellido'] ?? '');
-        $email = limpiar_texto($_POST['email'] ?? '');
-        $username = limpiar_texto($_POST['username'] ?? '');
-        $password = limpiar_texto($_POST['password'] ?? '');
-        $confirmPassword = limpiar_texto($_POST['confirmPassword'] ?? '');
+        $nombre = limpiarTexto($_POST['nombre'] ?? '');
+        $apellido = limpiarTexto($_POST['apellido'] ?? '');
+        $email = limpiarTexto($_POST['email'] ?? '');
+        $username = limpiarTexto($_POST['username'] ?? '');
+        $password = limpiarTexto($_POST['password'] ?? '');
+        $confirmPassword = limpiarTexto($_POST['confirmPassword'] ?? '');
 
         // control sobre los datos de entrada
         if (strlen($nombre) < 5 || strlen($nombre) > 20) {

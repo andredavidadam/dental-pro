@@ -34,7 +34,8 @@ abstract class Tipologia
 
 abstract class Rol
 {
-    const Rol = array('administrador' => 1, 'manager' => 2, 'usuario' => 3, '' => 10);
+        const Rainweb = ['' => 1, 'usuario' => 2, 'manager' => 3,  'administrador' => 4];
+        const DentalPro = ['' => 1, 'manager' => 2,  'administrador' => 3];
 
     static function getOperazioni()
     {
@@ -43,11 +44,10 @@ abstract class Rol
     }
 }
 
-function limpiar_texto($texto)
+function limpiarTexto($texto)
 {
     global $dbDentalPro;
-    $texto = htmlentities(trim($texto));
-    $textoLimpio = mysqli_real_escape_string($dbDentalPro, $texto);
+    $textoLimpio = trim(addslashes(htmlentities(($texto))));
     return $textoLimpio;
 }
 
@@ -76,7 +76,7 @@ function setLog($operacion, $mensaje)
 {
     global $dbDentalPro;
     global $username_session;
-    $mensajeLimpio = limpiar_texto($mensaje);
+    $mensajeLimpio = limpiarTexto($mensaje);
     $operacion = ucfirst(strtolower($operacion));
     if ($username_session == "")
         $sql = "INSERT INTO log(operacion, descripcion, created_by) VALUES('$operacion','$mensajeLimpio','sistema')";
@@ -123,75 +123,85 @@ function stampa($dato)
 // EJENPLO: permiso(array('rainweb' => '','dentalpro' => 'manager'));
 // solo los usuarios de rainweb de cualquier tipologia y los usuarios de dentalpro con tipologia manager y superior
 // (administrador y manager) pueden acceder a la pagina los demas seran redireccionados
-function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'index.php', $idConsultorio = false)
+function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'dashboard.php', $idConsultorio = false)
 {
     global $dbDentalPro;
-    global $tipologia_session;
-    global $rol_session;
     global $is_logado_session;
     global $id_session;
     global $username_session;
-
-    if(!$dbDentalPro){
-        echo "<script>alert('Hubo un problema con el rervidor... Intentalo mas tarde');</script>";
-        echo "<script>window.location.href = '" . $urlPermisoNegado . "';</script>";
-        exit;
-    }
+    global $tipologia_session;
+    global $rol_session;
 
     // controlo que la session sea valida
     if ($is_logado_session !== true || $id_session !== $_SESSION['id']) {
-        SetLog(Operacion::Acceso, 'se intento acceder de forma invalida desde [' . GetIP() . ']');
+        SetLog(Operacion::Acceso, 'se intento acceder de forma invalida con una session no iniciada [' . GetIP() . ']');
         echo "<script>alert('No tienes permiso para acceder a esta pagina');</script>";
+        echo "<script>window.location.href = 'index.php';</script>";
+        exit;
+    }
+
+    // controlo si el database esta disponible
+    if (!$dbDentalPro) {
+        echo "<script>alert('Hubo un problema con el servidor... Intentalo mas tarde');</script>";
         echo "<script>window.location.href = '" . $urlPermisoNegado . "';</script>";
         exit;
     }
 
-    // TODO: realizar despues el control para un consultorio
-    /* if($idConsultorio){
-        return false;
-    } */
-
-    // controlo que el usuario tenga la tipologia seleccionada
+    // controlo que el usuario tenga la tipologia 
     if (!array_key_exists($tipologia_session, $arrayTipologiaPermitida)) {
-        SetLog(Operacion::Acceso, "$username_session intento acceder a una pagina restringida con la tipologia $tipologia_session  [" . GetIP() . "]");
+        SetLog(Operacion::Acceso, "$username_session intento acceder con una tipologia invalida  [" . GetIP() . "]");
         echo "<script>alert('no tienes permiso para acceder a esta pagina');</script>";
         echo "<script>window.location.href = '" . $urlPermisoNegado . "';</script>";
         exit;
-    } else {
-        $idRolSession = 0;
-        // obtengo el valor del rol del permiso
-        foreach (Rol::Rol as $rol => $idRol) {
-            if ($arrayTipologiaPermitida[$tipologia_session] == $rol) {
-                $idRolSession = $idRol;
-                break;
-            }
-        }
+    }
 
-        // controlo que el rol exista en la clase abstracta rol
-        if (empty(Rol::Rol[$rol_session])) {
-            SetLog(Operacion::Acceso, "$username_session intento acceder a una pagina restringida con el rol  $rol_session [" . GetIP() . "]");
-            echo "<script>alert('No tienes permiso para acceder a esta pagina');</script>";
+
+    $idRolPermiso = 0;
+    switch ($tipologia_session) {
+        case Tipologia::Rainweb:
+            // obtengo el valor del rol del permiso
+            $idRolSession = Rol::Rainweb[$rol_session];
+            $rolPermiso = $arrayTipologiaPermitida[Tipologia::Rainweb];
+            $idRolPermiso = Rol::Rainweb[$rolPermiso];
+            break;
+
+        case Tipologia::DentalPro:
+            // obtengo el valor del rol del permiso
+            $idRolSession = Rol::DentalPro[$rol_session];
+            $rolPermiso = $arrayTipologiaPermitida[Tipologia::DentalPro];
+            $idRolPermiso = Rol::DentalPro[$rolPermiso];
+            break;
+
+        default:
+            SetLog(Operacion::Acceso, "$username_session intento acceder con una tipologia inexistente  [" . GetIP() . "]");
+            echo "<script>alert('no tienes permiso para acceder a esta pagina');</script>";
             echo "<script>window.location.href = '" . $urlPermisoNegado . "';</script>";
             exit;
-        }
+    }
 
-        // controlo si el valor del rol del permiso es menor al rol de la sesion
-        if ($idRolSession < Rol::Rol[$rol_session]) {
-            SetLog(Operacion::Acceso, "$username_session intento acceder a una pagina restringida con el rol  $rol_session [" . GetIP() . "]");
-            echo "<script>alert('No tienes permiso para acceder a esta pagina');</script>";
-            echo "<script>window.location.href = '" . $urlPermisoNegado . "';</script>";
-            exit;
-        }
+    if ($idRolSession < $idRolPermiso) {
+        SetLog(Operacion::Acceso, "$username_session intento acceder a una pagina restringida  [" . GetIP() . "]");
+        echo "<script>alert('no tienes permiso para acceder a esta pagina');</script>";
+        echo "<script>window.location.href = '" . $urlPermisoNegado . "';</script>";
+        exit;
     }
 }
 
-function permisoControl(){
+function permisoControl()
+{
+    global $ip_session;
     global $id_session;
     global $is_logado_session;
 
-    // controlo que la session sea valida
+    // controlo que la session se haya iniciado
     if ($is_logado_session !== true || $id_session !== $_SESSION['id']) {
-        SetLog(Operacion::Backend, 'se intento acceder de forma invalida desde [' . GetIP() . ']');
+        SetLog(Operacion::Backend, 'se intento acceder de forma invalida con una session no iniciada [' . GetIP() . ']');
+        exit;
+    }
+
+    // controlo que la solicitud se haya hecho desde la misma ip
+    if ($ip_session !== $_SESSION['ip_usuario']) {
+        SetLog(Operacion::Backend, 'se intento acceder de forma invalida desde una ip diferente [' . GetIP() . ']');
         exit;
     }
 }
