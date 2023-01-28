@@ -7,6 +7,10 @@ include('inc/head.php');
 include('inc/scripts.php');
 include('inc/utility.php');
 
+if (isset($_SESSION['id']) || isset($_SESSION['is_logado'])) {
+    header("Location: dashboard.php");
+}
+
 ?>
 
 <body>
