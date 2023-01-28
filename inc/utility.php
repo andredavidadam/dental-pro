@@ -11,6 +11,7 @@ abstract class Operacion
     const Notificacion = "Notificacion";
     const Error = "Error";
     const Backend = "Backend";
+    const Seguridad = "Seguridad";
 
     static function getOperazioni()
     {
@@ -132,26 +133,28 @@ function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'dashboard.php', 
     global $tipologia_session;
     global $rol_session;
 
-    // controlo que la session sea valida
-    if ($is_logado_session !== true || $id_session !== $_SESSION['id']) {
-        SetLog(Operacion::Acceso, 'se intento acceder de forma invalida con una session no iniciada [' . GetIP() . ']');
-        echo "<script>alert('no tienes permiso para acceder a esta pagina');</script>";
-        echo "<script>window.location.href = 'index.php';</script>";
-        exit;
-    }
-
-    // controlo si el database esta disponible
+    // si el db no esta disponible lo mando al index
     if (!$dbDentalPro) {
         echo "<script>alert('Hubo un problema con el servidor... Intentalo mas tarde');</script>";
-        echo "<script>window.location.href = '" . $urlPermisoNegado . "';</script>";
+        header("Location: index.php");
         exit;
     }
 
-    // controlo que el usuario tenga la tipologia 
-    if (!array_key_exists($tipologia_session, $arrayTipologiaPermitida)) {
-        SetLog(Operacion::Acceso, "$username_session intento acceder con una tipologia invalida  [" . GetIP() . "]");
+    // si la session no es valida lo mando al index (evita el acceso a quien no esta logado)
+    if ($is_logado_session !== true || $id_session !== $_SESSION['id']) {
+        SetLog(Operacion::Seguridad, 'se intento acceder de forma invalida con una session no iniciada [' . GetIP() . ']');
         echo "<script>alert('no tienes permiso para acceder a esta pagina');</script>";
-        echo "<script>window.location.href = '" . $urlPermisoNegado . "';</script>";
+        header("Location: index.php");
+        exit;
+    }
+
+    // si se llega hasta aqui, la session se inicio correctamente
+
+    // si la tipologia de la session no esta en el permiso lo mando al dashboard
+    if (!array_key_exists($tipologia_session, $arrayTipologiaPermitida)) {
+        SetLog(Operacion::Seguridad, "$username_session intento acceder con una tipologia invalida  [" . GetIP() . "]");
+        echo "<script>alert('no tienes permiso para acceder a esta pagina');</script>";
+        header("Location: $urlPermisoNegado");
         exit;
     }
 
@@ -173,35 +176,31 @@ function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'dashboard.php', 
             break;
 
         default:
-            SetLog(Operacion::Acceso, "$username_session intento acceder con una tipologia inexistente  [" . GetIP() . "]");
+            SetLog(Operacion::Seguridad, "$username_session intento acceder con una tipologia inexistente  [" . GetIP() . "]");
             echo "<script>alert('no tienes permiso para acceder a esta pagina');</script>";
-            echo "<script>window.location.href = '" . $urlPermisoNegado . "';</script>";
+            header("Location: $urlPermisoNegado");
             exit;
     }
 
+    // si el usuario no tiene permiso para acceder lo redirecciono
     if ($idRolSession < $idRolPermiso) {
         SetLog(Operacion::Acceso, "$username_session intento acceder a una pagina restringida  [" . GetIP() . "]");
         echo "<script>alert('no tienes permiso para acceder a esta pagina');</script>";
-        echo "<script>window.location.href = '" . $urlPermisoNegado . "';</script>";
+        header("Location: $urlPermisoNegado");
         exit;
     }
 }
 
+// funcion que evita el acceso no autorizado a las paginas del control,
+// sirve para evitar bots y scrapers
 function permisoControl()
 {
-    global $ip_session;
     global $id_session;
     global $is_logado_session;
 
-    // controlo que la session se haya iniciado
+    // si la session no es valida no le permito el acceso
     if ($is_logado_session !== true || $id_session !== $_SESSION['id']) {
         SetLog(Operacion::Backend, 'se intento acceder de forma invalida con una session no iniciada [' . GetIP() . ']');
-        exit;
-    }
-
-    // controlo que la solicitud se haya hecho desde la misma ip
-    if ($ip_session !== $_SESSION['ip_usuario']) {
-        SetLog(Operacion::Backend, 'se intento acceder de forma invalida desde una ip diferente [' . GetIP() . ']');
         exit;
     }
 }
