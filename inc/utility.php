@@ -34,8 +34,8 @@ abstract class Tipologia
 
 abstract class Rol
 {
-        const Rainweb = ['' => 1, 'usuario' => 2, 'manager' => 3,  'administrador' => 4];
-        const DentalPro = ['' => 1, 'manager' => 2,  'administrador' => 3];
+    const Rainweb = ['' => 1, 'usuario' => 2, 'manager' => 3,  'administrador' => 4];
+    const DentalPro = ['' => 1, 'usuario' => 2,  'manager' => 3, 'administrador' => 4];
 
     static function getOperazioni()
     {
@@ -135,7 +135,7 @@ function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'dashboard.php', 
     // controlo que la session sea valida
     if ($is_logado_session !== true || $id_session !== $_SESSION['id']) {
         SetLog(Operacion::Acceso, 'se intento acceder de forma invalida con una session no iniciada [' . GetIP() . ']');
-        echo "<script>alert('No tienes permiso para acceder a esta pagina');</script>";
+        echo "<script>alert('no tienes permiso para acceder a esta pagina');</script>";
         echo "<script>window.location.href = 'index.php';</script>";
         exit;
     }
