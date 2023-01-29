@@ -151,6 +151,7 @@ function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'dashboard.php', 
     // si se llega hasta aqui, la session se inicio correctamente
 
     // si la tipologia de la session no esta en el permiso lo mando al dashboard
+    // tambien redirecciono en el caso que no tenga una tipologia y rol en el bd
     if (!array_key_exists($tipologia_session, $arrayTipologiaPermitida)) {
         SetLog(Operacion::Seguridad, "$username_session intento acceder con una tipologia invalida  [" . GetIP() . "]");
         echo "<script>alert('no tienes permiso para acceder a esta pagina');</script>";
