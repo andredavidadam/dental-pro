@@ -52,7 +52,6 @@
                     echo '<li><a class="dropdown-item text-danger fw-bold" onclick="Logout()" href="#">Logout</a></li>';
 
                     if (1 === 1) {
-                        echo "<li><a class='dropdown-item fw-bold' href='#'>ip_session = $ip_session</a></li>";
                         echo "<li><a class='dropdown-item fw-bold' href='#'>id_session = $id_session</a></li>";
                         echo "<li><a class='dropdown-item fw-bold' href='#'>is_logado = $is_logado_session</a></li>";
                         echo "<li><a class='dropdown-item fw-bold' href='#'>id_usuario = $id_usuario_session</a></li>";

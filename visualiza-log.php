@@ -33,7 +33,6 @@ permiso(array('rainweb' => 'administrador'));
                             <th class="text-center">Operacion</th>
                             <th class="text-center">Descripcion</th>
                             <th class="text-center">Fecha</th>
-                            <th class="text-center">Actions</th>
                         </tr>
                     </thead>
                 </table>
@@ -48,14 +47,24 @@ permiso(array('rainweb' => 'administrador'));
         $(document).ready(function() {
             /* tabella dinamica */
             let tablaLog = $('#tab-log').DataTable({
-                dom: 'lrtip',
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    url: "control/serverside-visualiza-log.php",
+                    type: "POST",
+                    data: {
+                        "operacion": "getTablaLog"
+                    },
+                },
                 responsive: true,
                 columnDefs: [{
-                    orderable: true,
+                    orderable: false,
+                    "width": "15%",
                     "className": "text-center align-middle white-space",
                     targets: 0
                 }, {
                     orderable: false,
+                    "width": "15%",
                     "className": "text-center align-middle white-space",
                     targets: 1
                 }, {
@@ -63,16 +72,12 @@ permiso(array('rainweb' => 'administrador'));
                     "className": "text-center align-middle",
                     targets: 2
                 }, {
-                    orderable: false,
-                    "className": "text-center align-middle",
-                    targets: 3
-                }, {
-                    orderable: false,
+                    orderable: true,
                     "className": "text-center align-middle",
                     targets: 3
                 }],
                 "order": [
-                    [0, "asc"]
+                    [3, "desc"]
                 ],
                 "bPaginate": true,
                 "lengthChange": false,
@@ -89,56 +94,8 @@ permiso(array('rainweb' => 'administrador'));
                         "sNext": "Avanti",
                         "sPrevious": "Indietro"
                     }
-                },
-                "iDisplayLength": 25,
-                colReorder: true,
-                "drawCallback": function(settings) {
-                    /* inizializzo tutti i popovers */
-                    $("[data-bs-toggle='popover']").each(function(indice, elemento) {
-                        return new bootstrap.Popover(elemento, {
-                            html: true,
-                            sanitize: false,
-                            position: "fixed",
-                            placement: "top",
-                        })
-                    });
                 }
             });
-
-            actualizaTabla();
-
-            function actualizaTabla() {
-                $.ajax({
-                    url: "control/control-visualiza-log.php",
-                    type: 'POST',
-                    data: {
-                        "operacion": "getTablaLog"
-                    },
-                }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                console.log('error en el ajax');
-                }).done(function(response) {
-                    let json = JSON.parse(response);
-                    tablaLog.clear();
-                    tablaLog.rows.add(json);
-                    tablaLog.draw();
-
-                    $('#tab-log').off('click', '.modifica-colore');
-                    $('#tab-log').off('shown.bs.popover', "[data-bs-toggle='popover']");
-
-                    $('#tab-log').on('click', '.modifica-colore', function() {
-                        ImpostaCampiModificaColore($(this).val());
-                    });
-
-                    $('#tab-log').on('shown.bs.popover', "[data-bs-toggle='popover']", function() {
-                        $(".delete-colore").on('click', function() {
-                            DeleteColore($(this).val());
-                        });
-                        $(".chiudi-popover").on('click', function() {
-                            $("[data-bs-toggle='popover']").popover('hide');
-                        });
-                    });
-                });
-            }
         });
     </script>
 </body>
