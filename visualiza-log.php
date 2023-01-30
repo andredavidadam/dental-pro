@@ -11,7 +11,7 @@ permiso(array('rainweb' => 'administrador'));
 <title>Rainweb - Dashboard</title>
 
 <body>
-    <?php include('componentes/componente-navbar-perfil.php'); ?>
+    <?php include('componentes/componente-navbar-menu.php'); ?>
 
     <!-- Hero section Start -->
     <section class="hero-2 position-relative">

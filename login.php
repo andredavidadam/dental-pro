@@ -8,9 +8,8 @@ include('inc/scripts.php');
 include('inc/utility.php');
 
 if (isset($_SESSION['id']) || isset($_SESSION['is_logado'])) {
-    header("Location: dashboard.php");
+    header("Location: index.php");
 }
-
 ?>
 
 <body>
@@ -65,7 +64,7 @@ if (isset($_SESSION['id']) || isset($_SESSION['is_logado'])) {
                 }).done(function(response) {
                     let json = JSON.parse(response);
                     if (json['status'] == 'success') {
-                        window.location.href = "dashboard.php";
+                        window.location.href = "index.php";
                     } else {
                         //alert(json['mensaje']);
                     }

@@ -2,17 +2,23 @@
 <html lang="en">
 
 <?php
-include("inc/session.php");
-include("inc/head.php");
-include("inc/scripts.php");
+include('inc/session.php');
+include('inc/head.php');
+include('inc/scripts.php');
+include('inc/utility.php');
 
 ?>
+<title>Rainweb - Index</title>
 
 <body>
+    <?php
+        include('componentes/componente-navbar-menu.php');
+    ?>
+
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1>Pagina que todos pueden ver 1</h1>
+                <h1>Pagina de login</h1>
             </div>
         </div>
         <div class="row">
