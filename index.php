@@ -12,7 +12,7 @@ include('inc/utility.php');
 
 <body>
     <?php
-        include('componentes/componente-navbar-menu.php');
+    include('componentes/componente-navbar-menu.php');
     ?>
 
     <div class="container">
@@ -21,7 +21,15 @@ include('inc/utility.php');
                 <h1>index</h1>
             </div>
         </div>
-        
+        <!-- botones -->
+        <div class="row">
+            <div class="col-4 me-2 ms-2">
+                <a type="button" class="btn btn-primary" href="login.php">Login</a>
+            </div>
+            <div class="col-4 me-2 ms-2">
+                <a type="button" class="btn btn-primary" href="registro.php">Registro</a>
+            </div>
+        </div>
     </div>
 </body>
 

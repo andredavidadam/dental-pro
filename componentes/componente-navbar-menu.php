@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-        <a class="navbar-brand" href="dashboard.php">Inicio</a>
+        <a class="navbar-brand" href="index.php">Inicio</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -57,19 +57,9 @@
                             </ul>
                         </li>
                     </ul>
-                    <!-- botones -->
-                    <div class="row">
-                        <div class="col-4 me-2 ms-2">
-                            <a type="button" class="btn btn-primary" href="login.php">Login</a>
-                        </div>
-                        <div class="col-4 me-2 ms-2">
-                            <a type="button" class="btn btn-primary" href="registro.php">Registro</a>
-                        </div>
-                    </div>
             <?php
                     break;
             }
-            //include('componente-dropdown-perfil.php');
             ?>
         </div>
     </div>

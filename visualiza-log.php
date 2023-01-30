@@ -6,6 +6,7 @@ include('inc/session.php');
 include('inc/head.php');
 include('inc/scripts.php');
 include('inc/utility.php');
+
 permiso(array('rainweb' => 'administrador'));
 ?>
 <title>Rainweb - log</title>
