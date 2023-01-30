@@ -82,19 +82,22 @@ permiso(array('rainweb' => 'administrador'));
                 "bPaginate": true,
                 "lengthChange": false,
                 "oLanguage": {
-                    "sInfo": "Stai visualizzando <b>da _START_ a _END_</b> di _TOTAL_ elementi",
+                    "sInfo": "Estas viendo <b>de _START_ a _END_</b> de _TOTAL_ elementos",
                     "sInfoEmpty": "Visualizzati 0 per 0 di 0 elementi",
-                    "sInfoFiltered": "(filtrati su un totale di&nbsp;_MAX_&nbsp;elementi)",
+                    "sInfoEmpty": "No hay nada para mostrar",
+                    "sInfoFiltered": "(filtrado sobre un total de&nbsp;_MAX_&nbsp;elementos)",
                     "sSearch": "",
-                    "sSearchPlaceholder": "Ricerca",
-                    "sZeroRecords": "Nessun elemento trovato",
+                    "sSearchPlaceholder": "Buscar...",
+                    "sZeroRecords": "Ningun elemento encontrado",
                     "oPaginate": {
-                        "sFirst": "Prima pagina",
+                        "sFirst": "Primera pagina",
                         "sLast": "Ultima pagina",
-                        "sNext": "Avanti",
-                        "sPrevious": "Indietro"
+                        "sNext": "siguiente",
+                        "sPrevious": "Atras"
                     }
-                }
+                },
+                "iDisplayLength": 50,
+                colReorder: true
             });
         });
     </script>
