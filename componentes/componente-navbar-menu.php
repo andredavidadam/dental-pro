@@ -57,6 +57,15 @@
                             </ul>
                         </li>
                     </ul>
+                    <!-- botones -->
+                    <div class="row">
+                        <div class="col-4 me-2 ms-2">
+                            <a type="button" class="btn btn-primary" href="login.php">Login</a>
+                        </div>
+                        <div class="col-4 me-2 ms-2">
+                            <a type="button" class="btn btn-primary" href="registro.php">Registro</a>
+                        </div>
+                    </div>
             <?php
                     break;
             }
