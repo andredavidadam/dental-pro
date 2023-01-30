@@ -8,14 +8,12 @@ include('inc/scripts.php');
 include('inc/utility.php');
 permiso(array('rainweb' => '', 'dentalpro' => ''));
 ?>
-<title>Rainweb - Dashboard</title>
+<title>Rainweb - perfil</title>
 
 <body>
     <?php include('componentes/componente-navbar-menu.php'); ?>
-
-    <!-- Hero section Start -->
-    <section class="hero-2 position-relative">
-        <div class="container">
+    <div class="container">
+        <section class="hero-2 position-relative">
             <div class="row justify-content-center">
                 <div class="col-6">
                     <div class="text-center title mb-5 mt-5">
@@ -24,17 +22,8 @@ permiso(array('rainweb' => '', 'dentalpro' => ''));
                     </div>
                 </div>
             </div>
-            <!-- end row -->
-            <div class="row hero-2-content">
-                card
-
-            </div>
-            <!-- end row -->
-        </div>
-        <!-- end container -->
-
-    </section>
-    <!-- Hero section End -->
+        </section>
+    </div>
 </body>
 
 </html>

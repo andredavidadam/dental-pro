@@ -7,6 +7,7 @@ include('inc/head.php');
 include('inc/scripts.php');
 include('inc/utility.php');
 
+// si el usuario esta logado lo mando al index
 if (isset($_SESSION['is_logado']) || $is_logado === true) {
     header("Location: index.php");
 }
@@ -14,8 +15,18 @@ if (isset($_SESSION['is_logado']) || $is_logado === true) {
 
 <body>
     <div class="container">
+    <section class="hero-2 position-relative">
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <div class="text-center title mb-5 mt-5">
+                    <p class="text-muted text-uppercase fw-normal mb-2">Administracion</p>
+                    <h3 class="mb-3">Visualiza Perfil</h3>
+                </div>
+            </div>
+        </div>
+    </section>
         <div class="row">
-            <div class="col">
+            <div class="col text-center">
                 <h1>Pagina de login</h1>
             </div>
         </div>

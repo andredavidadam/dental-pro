@@ -8,14 +8,14 @@ include('inc/scripts.php');
 include('inc/utility.php');
 permiso(array('rainweb' => 'administrador'));
 ?>
-<title>Rainweb - Dashboard</title>
+<title>Rainweb - log</title>
 
 <body>
     <?php include('componentes/componente-navbar-menu.php'); ?>
 
     <!-- Hero section Start -->
-    <section class="hero-2 position-relative">
-        <div class="container">
+    <div class="container">
+        <section class="hero-2 position-relative">
             <div class="row justify-content-center">
                 <div class="col-6">
                     <div class="text-center title mb-5 mt-5">
@@ -24,24 +24,23 @@ permiso(array('rainweb' => 'administrador'));
                     </div>
                 </div>
             </div>
-            <!-- end row -->
-            <div class="row hero-2-content">
-                <table id="tab-log">
-                    <thead>
-                        <tr>
-                            <th class="text-center">Usuario</th>
-                            <th class="text-center">Operacion</th>
-                            <th class="text-center">Descripcion</th>
-                            <th class="text-center">Fecha</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-            <!-- end row -->
-        </div>
+        </section>
         <!-- end container -->
-
-    </section>
+        <!-- end row -->
+        <div class="row hero-2-content">
+            <table id="tab-log">
+                <thead>
+                    <tr>
+                        <th class="text-center">Usuario</th>
+                        <th class="text-center">Operacion</th>
+                        <th class="text-center">Descripcion</th>
+                        <th class="text-center">Fecha</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <!-- end row -->
     <!-- Hero section End -->
     <script>
         $(document).ready(function() {

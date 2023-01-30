@@ -7,7 +7,9 @@ include("inc/head.php");
 include("inc/scripts.php");
 include("inc/utility.php");
 
-if ($is_logado_session === true && $tipologia_session!==Tipologia::Rainweb) {
+// solo los administradores de rainweb pueden registrar a usuarios
+// los demas son redireccionados
+if ($is_logado_session === true && $tipologia_session !== Tipologia::Rainweb) {
     header("Location: index.php");
     return;
 }
@@ -15,8 +17,18 @@ if ($is_logado_session === true && $tipologia_session!==Tipologia::Rainweb) {
 
 <body>
     <div class="container">
+        <section class="hero-2 position-relative">
+            <div class="row justify-content-center">
+                <div class="col-6">
+                    <div class="text-center title mb-5 mt-5">
+                        <p class="text-muted text-uppercase fw-normal mb-2">Administracion</p>
+                        <h3 class="mb-3">Visualiza Perfil</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
         <div class="row">
-            <div class="col">
+            <div class="col text-center">
                 <h1>Pagina de registro</h1>
             </div>
         </div>
