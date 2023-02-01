@@ -1,5 +1,5 @@
-<div class="dropdown">
-    <button type="button" class="btn btn-info dropdown-toggle " id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+<div class="dropdown me-3">
+    <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown">
         Hola, <?php echo ucfirst($username_session); ?>!
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">

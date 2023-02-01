@@ -124,11 +124,9 @@ function stampa($dato)
 // EJENPLO: permiso(array('rainweb' => '','dentalpro' => 'manager'));
 // solo los usuarios de rainweb de cualquier tipologia y los usuarios de dentalpro con tipologia manager y superior
 // (administrador y manager) pueden acceder a la pagina los demas seran redireccionados
-function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'dashboard.php', $idConsultorio = false)
+function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'index.php', $idConsultorio = false)
 {
     global $dbDentalPro;
-    global $is_logado_session;
-    global $id_session;
     global $username_session;
     global $tipologia_session;
     global $rol_session;
@@ -141,7 +139,7 @@ function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'dashboard.php', 
     }
 
     // si la session no es valida lo mando al index (evita el acceso a quien no esta logado)
-    if ($is_logado_session !== true || $id_session !== $_SESSION['id']) {
+    if(!isLogado()){
         SetLog(Operacion::Seguridad, 'se intento acceder de forma invalida con una session no iniciada [' . GetIP() . ']');
         echo "<script>alert('no tienes permiso para acceder a esta pagina');</script>";
         header("Location: index.php");
@@ -200,8 +198,18 @@ function permisoControl()
     global $is_logado_session;
 
     // si la session no es valida no le permito el acceso
-    if ($is_logado_session !== true || $id_session !== $_SESSION['id']) {
+    if (!isLogado()) {
         SetLog(Operacion::Backend, 'se intento acceder de forma invalida con una session no iniciada [' . GetIP() . ']');
         exit;
     }
+}
+
+function isLogado(){
+    global $is_logado_session;
+    global $id_session;
+    $isLogado=false;
+    if ($is_logado_session === true || $id_session === $_SESSION['id']) {
+        $isLogado=true;
+    }
+    return $isLogado;
 }

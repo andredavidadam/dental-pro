@@ -1,21 +1,22 @@
 drop table if exists usuario;
 
 CREATE TABLE usuario (
-  id int AUTO_INCREMENT not null,
+id int AUTO_INCREMENT not null,
 
-  username varchar(128) NOT NULL,
-  password varchar(256) NOT NULL,
-  nombre varchar(128) DEFAULT NULL,
-  apellido varchar(256) DEFAULT NULL,
-  email varchar(128) NOT NULL,
-  tipologia int DEFAULT NULL,
-  rol int DEFAULT NULL,
-  data_registro timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  data_ultimo_acceso timestamp NULL DEFAULT NULL,
-  data_ultimo_movimiento timestamp NULL DEFAULT NULL,
+username varchar(128) NOT NULL,
+password varchar(256) NOT NULL,
+nombre varchar(128) DEFAULT NULL,
+apellido varchar(256) DEFAULT NULL,
+email varchar(128) NOT NULL,
+telefono varchar(16),
+tipologia int DEFAULT NULL,
+rol int DEFAULT NULL,
+data_registro timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+data_ultimo_acceso timestamp NULL DEFAULT NULL,
+data_ultimo_movimiento timestamp NULL DEFAULT NULL,
 
-  created_by varchar(64) DEFAULT NULL,
-  timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+created_by varchar(64) DEFAULT NULL,
+timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO usuario (id, username, password, nombre, apellido, email, tipologia, rol, data_registro, data_ultimo_acceso, data_ultimo_movimiento, created_by) VALUES
