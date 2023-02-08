@@ -2,17 +2,17 @@
 <html lang="en">
 
 <?php
-include('inc/session.php');
-include('inc/head.php');
-include('inc/scripts.php');
-include('inc/utility.php');
+include_once('inc/session.php');
+include_once('inc/head.php');
+include_once('inc/scripts.php');
+include_once('inc/utility.php');
 
 ?>
 <title>Rainweb - Index</title>
 
 <body>
     <?php
-    include('componentes/componente-navbar-menu.php');
+    include_once('componentes/componente-navbar-menu.php');
     ?>
 
     <div class="container">
@@ -22,14 +22,7 @@ include('inc/utility.php');
             </div>
         </div>
         <!-- botones -->
-        <div class="row">
-            <div class="col-4 me-2 ms-2">
-                <a type="button" class="btn btn-primary" href="login.php">Login</a>
-            </div>
-            <div class="col-4 me-2 ms-2">
-                <a type="button" class="btn btn-primary" href="registro.php">Registro</a>
-            </div>
-        </div>
+        
     </div>
 </body>
 

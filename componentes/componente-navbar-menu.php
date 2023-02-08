@@ -25,7 +25,7 @@
                             </li>
                         </ul>
                     <?php
-                        include('componente-dropdown-perfil.php');
+                        include_once('componente-dropdown-perfil.php');
                         break;
                     case Tipologia::DentalPro:
                     ?>
@@ -43,7 +43,7 @@
                         </ul>
 
                     <?php
-                        include('componente-dropdown-perfil.php');
+                        include_once('componente-dropdown-perfil.php');
                         break;
                     default:
                     ?>
@@ -61,7 +61,7 @@
                         </ul>
                 <?php
                         // solo para el test, eliminar para produccion
-                        include('componente-dropdown-perfil.php');
+                        include_once('componente-dropdown-perfil.php');
                         break;
                 }
                 ?>

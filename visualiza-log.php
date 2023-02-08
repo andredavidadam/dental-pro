@@ -2,17 +2,17 @@
 <html lang="en">
 
 <?php
-include('inc/session.php');
-include('inc/head.php');
-include('inc/scripts.php');
-include('inc/utility.php');
+include_once('inc/session.php');
+include_once('inc/head.php');
+include_once('inc/scripts.php');
+include_once('inc/utility.php');
 
 permiso(array('rainweb' => 'administrador'));
 ?>
 <title>Rainweb - log</title>
 
 <body>
-    <?php include('componentes/componente-navbar-menu.php'); ?>
+    <?php include_once('componentes/componente-navbar-menu.php'); ?>
 
     <!-- Hero section Start -->
     <div class="container">

@@ -2,10 +2,10 @@
 <html lang="en">
 
 <?php
-include('inc/session.php');
-include('inc/head.php');
-include('inc/scripts.php');
-include('inc/utility.php');
+include_once('inc/session.php');
+include_once('inc/head.php');
+include_once('inc/scripts.php');
+include_once('inc/utility.php');
 
 // si el usuario esta logado lo mando al index
 if (isset($_SESSION['is_logado']) || $is_logado === true) {

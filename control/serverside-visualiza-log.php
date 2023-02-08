@@ -1,7 +1,7 @@
 <?php
-include("../inc/session.php");
-include('../inc/database.php');
-include('../inc/utility.php');
+include_once("../inc/session.php");
+include_once('../inc/database.php');
+include_once('../inc/utility.php');
 
 require('ssp.class.php');
 

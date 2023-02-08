@@ -3,8 +3,6 @@ session_start();
 include("../inc/utility.php");
 include("../inc/database.php");
 
-
-
 $operacion = limpiarTexto($_POST['operacion'] ?? '');
 
 switch ($operacion) {
@@ -17,8 +15,8 @@ switch ($operacion) {
         $confirmPassword = limpiarTexto($_POST['confirmPassword'] ?? '');
 
         // control sobre los datos de entrada
-        if (strlen($nombre) < 5 || strlen($nombre) > 20) {
-            error('EL nombre debe tener mas de 5 caracteres y menos de 20');
+        if (strlen($nombre) < 3 || strlen($nombre) > 20) {
+            error('EL nombre debe tener mas de 2 caracteres y menos de 20');
         }
         if (strlen($password) < 8 || strlen($password) > 32) {
             error('la contraseña debe tener mas de 8 caracteres y menos de 32');

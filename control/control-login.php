@@ -1,7 +1,7 @@
 <?php
 session_start();
-include("../inc/utility.php");
-include("../inc/database.php");
+include_once("../inc/utility.php");
+include_once("../inc/database.php");
 
 $operacion = $_POST['operacion'] ?? '';
 
@@ -31,8 +31,7 @@ switch ($operacion) {
             }
             $_SESSION["is_logado"] = true;
             $_SESSION["id_usuario"] = $idUsuario;
-            $_SESSION["ip_usuario"] = getIp();
-
+            
             $username = "";
             $email = "";
             $sql = "SELECT usuario.username, usuario.email FROM usuario WHERE usuario.id = $idUsuario;";

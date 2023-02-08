@@ -1,6 +1,6 @@
 <?php
-include("../inc/database.php");
-include("../inc/session.php");
+include_once("../inc/database.php");
+include_once("../inc/session.php");
 
 abstract class Operacion
 {
@@ -139,7 +139,7 @@ function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'index.php', $idC
     }
 
     // si la session no es valida lo mando al index (evita el acceso a quien no esta logado)
-    if(!isLogado()){
+    if (!isLogado()) {
         SetLog(Operacion::Seguridad, 'se intento acceder de forma invalida con una session no iniciada [' . GetIP() . ']');
         echo "<script>alert('no tienes permiso para acceder a esta pagina');</script>";
         header("Location: index.php");
@@ -194,9 +194,6 @@ function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'index.php', $idC
 // sirve para evitar bots y scrapers
 function permisoControl()
 {
-    global $id_session;
-    global $is_logado_session;
-
     // si la session no es valida no le permito el acceso
     if (!isLogado()) {
         SetLog(Operacion::Backend, 'se intento acceder de forma invalida con una session no iniciada [' . GetIP() . ']');
@@ -204,12 +201,23 @@ function permisoControl()
     }
 }
 
-function isLogado(){
-    global $is_logado_session;
-    global $id_session;
-    $isLogado=false;
-    if ($is_logado_session === true || $id_session === $_SESSION['id']) {
-        $isLogado=true;
+// funcion que valida si un usuario inicia sesion o no
+function isLogado()
+{
+    global $is_logado_session, $id_session;
+    $isLogado = false;
+    if ($is_logado_session === true && $id_session === $_SESSION['id']) {
+        $isLogado = true;
     }
     return $isLogado;
+}
+
+// funcion que valida el token para formularios
+function validateToken($token_session)
+{
+    $validToken = false;
+    if ($token_session === $_SESSION['token']) {
+        $validToken = true;
+    }
+    return $validToken;
 }

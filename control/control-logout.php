@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../inc/utility.php");
+include_once("../inc/utility.php");
 
 
 $_SESSION['id_session'] = '';
