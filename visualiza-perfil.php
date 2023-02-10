@@ -6,9 +6,12 @@ include_once('inc/session.php');
 include_once('inc/head.php');
 include_once('inc/scripts.php');
 include_once('inc/utility.php');
-if (!isLogado()) {
-    exit;
-}
+
+$_SESSION['token'] = $token = getToken(16);
+
+// if (!isLogado()) {
+//     exit;
+// }
 ?>
 <title>Rainweb - perfil</title>
 
@@ -29,7 +32,7 @@ if (!isLogado()) {
     $nivelAcceso = ucfirst($rol) . ' ' . ucfirst($tipologia);
     ?>
     <!-- Modal -->
-    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modal-cambiar-datos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class=" modal-content">
                 <div class="modal-header">
@@ -37,38 +40,37 @@ if (!isLogado()) {
                 </div>
                 <div class="modal-body">
                     <form id="form-actualiza-datos">
-                        <input type="hidden" value="actualizaDatos" name="operacion" id="operacion">
-                        <input type="hidden" value=<?php $_SESSION['token'] = getToken(16) ?> name="token" id="token">
+                        <input type="hidden" value=<?php echo $token ?> id="token">
                         <div class="row mb-2">
                             <div class="col">
                                 <label for="modal-nombre" class="col-form-label">Nombre:</label>
-                                <input type="text" class="form-control" value=<?php echo ucfirst($nombre) ?> name="modalNombre" id="modal-nombre" required>
+                                <input type="text" class="form-control" value=<?php echo ucfirst($nombre) ?> id="modal-nombre" required>
                                 <small class="form-text">Escribe tu nombre</small>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col">
                                 <label for="modal-apellido" class="col-form-label">Apellido:</label>
-                                <input type="text" class="form-control" value=<?php echo ucfirst($apellido) ?> name="modalApellido" id="modal-apellido" required>
+                                <input type="text" class="form-control" value=<?php echo ucfirst($apellido) ?> id="modal-apellido" required>
                                 <small class="form-text">Escribe tu apellido</small>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col">
                                 <label for="modal-email" class="col-form-label">Email:</label>
-                                <input type="text" class="form-control" value=<?php echo $email ?> name="modalEmail" id="modal-email">
+                                <input type="text" class="form-control" value=<?php echo $email ?> id="modal-email">
                                 <small class="form-text">Escribe tu correo</small>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col-6 ">
                                 <label for="modal-username" class="col-form-label">Nombre de usuario:</label>
-                                <input type="text" class="form-control" value=<?php echo $username ?> name="modalUsername" id="modal-username">
+                                <input type="text" class="form-control" value=<?php echo $username ?> id="modal-username">
                                 <small class="form-text">Escribe tu nombre de usuario</small>
                             </div>
                             <div class="col-6 ">
                                 <label for="modal-telefono" class="col-form-label">Telefono:</label>
-                                <input type="text" class="form-control" value=<?php echo $telefono ?> name="modalTelefono" id="modal-telefono">
+                                <input type="text" class="form-control" value=<?php echo $telefono ?> id="modal-telefono">
                                 <small class="form-text">Escribe tu telefono</small>
                             </div>
                         </div>
@@ -121,8 +123,8 @@ if (!isLogado()) {
                 <p id="email"><b><?php echo $telefono ?></b></p>
                 <div class="row">
                     <div class="col">
-                        <button class="btn btn-info mt-3 ms-3 me-3" id="pulsante-cambiar-datos">Modificar Datos</button>
-                        <button class="btn btn-info mt-3 ms-3 me-3" id="pulsante-cambiar-password">Cambia Password</button>
+                        <button type="button" class="btn btn-info mt-3 ms-3 me-3" id="pulsante-cambiar-datos">Modificar Datos</button>
+                        <button type="button" class="btn btn-info mt-3 ms-3 me-3" id="pulsante-cambiar-password">Cambia Password</button>
                     </div>
                 </div>
             </div>
@@ -130,39 +132,99 @@ if (!isLogado()) {
 </body>
 <script>
     $(document).ready(function() {
-        const formActualizaDatos = $("#form-actualiza-datos");
+        const inputToken = $("#token");
+        const inputNombre = $("#modal-nombre");
+        const inputApellido = $("#modal-apellido");
+        const inputEmail = $("#modal-email");
+        const inputUsername = $("#modal-username");
+        const inputTelefono = $("#modal-telefono");
 
         const pulsanteCambiarDatos = $("#pulsante-cambiar-datos");
         const pulsanteGuardarDatos = $("#pulsante-guardar-datos");
 
-        const modal = $('#modal');
+        const modalCambiarDatos = $('#modal-cambiar-datos');
 
         pulsanteCambiarDatos.on("click", function(e) {
-            e.preventDefault();
-            modal.modal('show');
+            modalCambiarDatos.modal('show');
         });
 
         pulsanteGuardarDatos.on("click", function(e) {
-            e.preventDefault();
-            guardarDatos();
-            modal.modal('hide');
+            const token = inputToken.val();
+            const nombre = inputNombre.val();
+            const apellido = inputApellido.val();
+            const email = inputEmail.val();
+            const username = inputUsername.val();
+            const telefono = inputTelefono.val();
 
+            if (nombre.length == 0) {
+                message('warning', 'Introduce un nombre');
+                return;
+            } else if (nombre.length < 3 || nombre.length > 20) {
+                message('warning', 'El nombre debe tener mas de 3 letras y menos de 20');
+                return;
+            }
 
-        });
+            if (apellido.length == 0) {
+                message('warning', 'Introduce un apellido');
+                return;
+            } else if (apellido.length < 3 || apellido.length > 20) {
+                message('warning', 'El apellido debe tener mas de 3 letras y menos de 20');
+                return;
+            }
 
-        function guardarDatos() {
+            if (email.length == 0) {
+                message('warning', 'Introduce un email');
+                return;
+            } else if (!validateEmail(email)) {
+                message('warning', 'Escribe un email valido');
+                return;
+            }
+
+            if (username.length == 0) {
+                message('warning', 'Introduce un nombre de usuario');
+                return;
+            } else if (username.length < 5 || username.length > 20) {
+                message('warning', 'El nombre de usuario debe tener mas de 5 letras y menos de 20');
+                return;
+            }
+
+            if (telefono.length < 7) {
+                message('warning', 'Introduce un numero telefonico valido o deja el campo vacio');
+                return;
+            }
+
             $.ajax({
                 url: "control/control-gestion-usuarios.php",
                 type: "POST",
-                data: formActualizaDatos.serialize(),
+                data: {
+                    "operacion": "actualizarDatos",
+                    "token": token,
+                    "nombre": nombre,
+                    "apellido": apellido,
+                    "email": email,
+                    "username": username,
+                    "telefono": telefono,
+                },
+            }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                message('error', 'No es posible conectarse al servidor <br> Intentalo mas tarde');
+                return;
             }).done(function(response) {
                 console.log(response);
                 return;
-            }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                // FAIL DA MODIFICARE
-                alert('token invalido');
+                try {
+                    var json = JSON.parse(response);
+                } catch (e) {
+                    message('error', 'Hubo un error al procesar los datos');
+                    return;
+                }
+
+                if (!validateResponse(json)) {
+                    return;
+                }
+                modalCambiarDatos.modal('hide');
             });
-        }
+
+        });
     });
 </script>
 

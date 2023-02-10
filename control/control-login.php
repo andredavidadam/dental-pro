@@ -11,7 +11,7 @@ switch ($operacion) {
         $password = limpiarTexto($_POST['password'] ?? '');
 
         if (empty($username) || empty($password)) {
-            error('datos incorrectos');
+            response('warning', 'datos incorrectos');
         }
 
         $sql = "SELECT password FROM usuario WHERE username = '$username';";
@@ -20,7 +20,7 @@ switch ($operacion) {
             $passwordHash = $row['password'] ?? '';
         }
         if ($passwordHash == "") {
-            error('usuario incorrecto');
+            response('warning', 'usuario incorrecto');
         }
 
         if (password_verify($password, $passwordHash)) {
@@ -31,7 +31,7 @@ switch ($operacion) {
             }
             $_SESSION["is_logado"] = true;
             $_SESSION["id_usuario"] = $idUsuario;
-            
+
             $username = "";
             $email = "";
             $sql = "SELECT usuario.username, usuario.email FROM usuario WHERE usuario.id = $idUsuario;";
@@ -44,13 +44,12 @@ switch ($operacion) {
             SetLog(Operacion::Acceso, "$username ha realizado el acceso ( $email ) [" . GetIP() . "]");
             $sql = "UPDATE usuario SET data_ultimo_acceso = now() WHERE id =  $idUsuario;";
             $loop = mysqli_query($dbDentalPro, $sql);
-            success();
+            response('success', 'el login se realizo correctamente');
         } else {
-            error('password incorrecta');
+            response('warning', 'password incorrecta');
         }
         return;
     default:
-        //$mensaje = 'operacion no encontrada';
-        error('error');
-        
+        response('error', 'operacion inexistente');
+        return;
 }

@@ -15,7 +15,6 @@
             echo "<li><a class='dropdown-item fw-bold' href='#'>username = $username_session</a></li>";
             echo "<li><a class='dropdown-item fw-bold' href='#'>tipologia = $tipologia_session</a></li>";
             echo "<li><a class='dropdown-item fw-bold' href='#'>rol = $rol_session</a></li>";
-            echo "<li><a class='dropdown-item fw-bold' href='#'>token = $token_session</a></li>";
         }
         ?>
     </ul>

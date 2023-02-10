@@ -4,7 +4,7 @@
 /* DATABASE DentalPro */
 $dbhostDentalPro = 'localhost';
 $dbuserDentalPro = 'root';
-$dbpassDentalPro = '4765178';
+$dbpassDentalPro = 'technology';
 $dbnameDentalPro = 'proyecto';
 
 $dbDentalPro = mysqli_connect($dbhostDentalPro, $dbuserDentalPro, $dbpassDentalPro, $dbnameDentalPro);
