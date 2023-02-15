@@ -84,8 +84,8 @@
             case 'warning':
                 var icon = 'bi bi-exclamation-triangle-fill';
                 var title = 'Atencion!';
-                var type = 'orange';
-                var pulsante = 'btn-warning';
+                var type = 'red';
+                var pulsante = 'btn-danger';
                 break;
             case 'error':
                 var icon = 'bi bi-x-circle-fill';
@@ -127,7 +127,7 @@
         return re.test(String(email).toLowerCase());
     }
 
-    // funcion qu evalida una contraseña de letras y numeros de almenos 10 caracteres
+    // funcion que valida una contraseña de letras y numeros de almenos 10 caracteres
     function validatePassword(password) {
         const re = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[\.\_\$]).{8,32}$/;
         return re.test(password);
@@ -154,5 +154,36 @@
                 break;
         }
         return isValid;
+    }
+    // funcion que agrega la visualizacion para un campo 
+    // llenado correctamente o no
+    function isValidInput(input, status) {
+        if (status) {
+            input.removeClass("is-invalid");
+            input.addClass("is-valid");
+        } else {
+            input.removeClass("is-valid");
+            input.addClass("is-invalid");
+            input.focus();
+        }
+    }
+
+    // limpia el campo input si este es modificado
+    function pressKey(input) {
+        input.each(function() {
+            $(this).keyup(function(e) {
+                $(this).removeClass("is-invalid");
+                $(this).removeClass("is-valid");
+            });
+        });
+    }
+
+    // limpia los campos del formulario
+    function cleanForm(input) {
+        input.each(function() {
+            $(this).removeClass("is-invalid");
+            $(this).removeClass("is-valid");
+            $(this).val('');
+        });
     }
 </script>
