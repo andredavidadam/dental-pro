@@ -2,7 +2,8 @@
 include_once("database.php");
 include_once("session.php");
 
-abstract class Operacion {
+abstract class Operacion
+{
     const CambioUsuario = "Cambio Usuario";
     const Registro = "Registro";
     const Acceso = "Acceso";
@@ -12,34 +13,40 @@ abstract class Operacion {
     const Backend = "Backend";
     const Seguridad = "Seguridad";
 
-    static function getOperazioni() {
+    static function getOperazioni()
+    {
         $classe = new ReflectionClass(__CLASS__);
         return $classe->getConstants();
     }
 }
 
-abstract class Tipologia {
+abstract class Tipologia
+{
     const Rainweb = "rainweb";
     const DentalPro = "dentalpro";
 
 
-    static function getOperazioni() {
+    static function getOperazioni()
+    {
         $classe = new ReflectionClass(__CLASS__);
         return $classe->getConstants();
     }
 }
 
-abstract class Rol {
+abstract class Rol
+{
     const Rainweb = ['' => 1, 'usuario' => 2, 'manager' => 3,  'administrador' => 4];
     const DentalPro = ['' => 1, 'usuario' => 2,  'manager' => 3, 'administrador' => 4];
 
-    static function getOperazioni() {
+    static function getOperazioni()
+    {
         $classe = new ReflectionClass(__CLASS__);
         return $classe->getConstants();
     }
 }
 
-function limpiarTexto($texto) {
+function limpiarTexto($texto)
+{
     $textoLimpio = trim(addslashes(htmlentities(($texto))));
     return $textoLimpio;
 }
@@ -48,7 +55,8 @@ function limpiarTexto($texto) {
 // hay 3 categorias warning, error y success
 // se usa die() par amatar el proceso en curso ya que se produjo un warning o 
 // un error o la funcion termino satisfactoriamente
-function response($status, $mensaje, $datos = null) {
+function response($status, $mensaje, $datos = null)
+{
     $response['status'] = $status;
     $response['mensaje'] = $mensaje;
     $response['datos'] = $datos;
@@ -57,7 +65,8 @@ function response($status, $mensaje, $datos = null) {
     exit; // sirve para matar el proceso en curso
 }
 
-function setLog($operacion, $mensaje) {
+function setLog($operacion, $mensaje)
+{
     global $dbDentalPro;
     global $username_session;
     $mensajeLimpio = limpiarTexto($mensaje);
@@ -69,7 +78,8 @@ function setLog($operacion, $mensaje) {
     mysqli_query($dbDentalPro, $sql);
 }
 
-function GetIP() {
+function GetIP()
+{
     $ipaddress = '';
     if (getenv('HTTP_CLIENT_IP'))
         $ipaddress = getenv('HTTP_CLIENT_IP');
@@ -88,12 +98,14 @@ function GetIP() {
     return $ipaddress;
 }
 
-function getToken($num = 64) {
+function getToken($num = 64)
+{
     $token = bin2hex(openssl_random_pseudo_bytes($num));
     return $token;
 }
 
-function stampa($dato) {
+function stampa($dato)
+{
     echo '<pre>';
     print_r($dato);
     echo '</pre>';
@@ -104,7 +116,8 @@ function stampa($dato) {
 // EJENPLO: permiso(array('rainweb' => '','dentalpro' => 'manager'));
 // solo los usuarios de rainweb de cualquier tipologia y los usuarios de dentalpro con tipologia manager y superior
 // (administrador y manager) pueden acceder a la pagina los demas seran redireccionados
-function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'index.php', $idConsultorio = false) {
+function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'index.php', $idConsultorio = false)
+{
     global $dbDentalPro;
     global $username_session;
     global $tipologia_session;
@@ -171,7 +184,8 @@ function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'index.php', $idC
 
 // funcion que evita el acceso no autorizado a las paginas del control,
 // sirve para evitar bots y scrapers
-function permisoControl() {
+function permisoControl()
+{
     // si la session no es valida no le permito el acceso
     if (!isLogado()) {
         SetLog(Operacion::Backend, 'se intento acceder de forma invalida con una session no iniciada [' . GetIP() . ']');
@@ -180,7 +194,8 @@ function permisoControl() {
 }
 
 // funcion que valida si un usuario inicio sesion o no
-function isLogado() {
+function isLogado()
+{
     global $is_logado_session, $id_session;
     $isLogado = false;
     if ($is_logado_session === true && $id_session === $_SESSION['id']) {
@@ -190,7 +205,8 @@ function isLogado() {
 }
 
 // funcion que valida el token para formularios
-function validateToken($token_session) {
+function validateToken($token_session)
+{
     $validToken = false;
     if ($token_session === $_SESSION['token']) {
         $validToken = true;

@@ -5,7 +5,7 @@
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
         <?php
         echo '<li><a class="dropdown-item" onclick="window.location.href=\'visualiza-perfil.php\'" href="#">Mi Perfil</a></li>';
-        echo '<li><a class="dropdown-item text-danger fw-bold" onclick="Logout()" href="#">Logout</a></li>';
+        echo '<li><a class="dropdown-item text-danger fw-bold" id="item-logout" href="#">Logout</a></li>';
 
         if (1 === 1) {
             echo "<li><a class='dropdown-item fw-bold' href='#'>id_session = $id_session</a></li>";

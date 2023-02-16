@@ -41,7 +41,7 @@ switch ($operacion) {
             response('warning', 'El username debe tener mas de 3 letras y menos de 20.');
         }
 
-        if (strlen($telefono) < 7) {
+        if (strlen($telefono) < 7 && strlen($telefono)!=0) {
             response('warning', 'Introduce un numero telefonico valido o deja el campo vacio.');
         }
 
@@ -69,7 +69,7 @@ switch ($operacion) {
 
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
         $sql = "INSERT INTO usuario (username, password, nombre, apellido, email, telefono) VALUES('$username', '$passwordHash', '$nombre', '$apellido', '$email', '$telefono');";
-        // mysqli_query($dbDentalPro, $sql);
+        mysqli_query($dbDentalPro, $sql);
         setLog(Operacion::Registro, "$username ha realizado el registro ( $email ) [" . GetIP() . "]");
         response('success', 'El registro se realizo correctamente <br> Ahora puedes iniciar sesion');
         exit;

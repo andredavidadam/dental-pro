@@ -36,11 +36,11 @@ if (isLogado()) {
                 <form>
                     <div class="mt-3 mb-3">
                         <label for="username" class="form-label">Nombre de Usuario</label>
-                        <input type="text" class="form-control" id="username" minlength="5" maxlength="20" value="andredavid" required>
+                        <input type="text" class="form-control control-input" id="input-username" value="andredavid" required>
                     </div>
                     <div class="mt-3 mb-3">
                         <label for="password" class="form-label">Password</label>
-                        <input type="text" class="form-control" id="password" minlength="8" maxlength="64" value="4765178lp." required></input>
+                        <input type="text" class="form-control control-input" id="input-password" value="4765178lp." required></input>
                     </div>
                     <div class="mt-3 mb-3">
                         <button type="button" id='pulsante-login' class="btn btn-primary">Login</button>
@@ -51,24 +51,29 @@ if (isLogado()) {
     </div>
     <script>
         $(document).ready(function() {
-            const inputUsername = $("#username");
-            const inputPassword = $("#password");
+            const inputUsername = $("#input-username");
+            const inputPassword = $("#input-password");
+
+            const controlInput = $(".control-input");
+
             const pulsanteLogin = $("#pulsante-login");
+
+            pressKey(controlInput);
 
             pulsanteLogin.on("click", function(e) {
                 const username = inputUsername.val();
                 const password = inputPassword.val();
 
                 if (username.length == 0) {
-                    message('warning', 'Introduce un nombre de usuario');
+                    invalidInput(inputUsername, 'Introduce un nombre de usuario');
                     return;
                 } else if (username.length < 5 || username.length > 20) {
-                    message('warning', 'El nombre de usuario debe tener mas de 5 letras y menos de 20');
+                    invalidInput(inputUsername, 'El nombre de usuario debe tener mas de 5 letras y menos de 20');
                     return;
                 }
 
                 if (!validatePassword(password)) {
-                    message('warning', 'La contraseña tiene 10 caracteres con letras y numeros');
+                    invalidInput(inputPassword, 'Introduce una contraseña de almenos 10 caracteres con letras y numeros y los simbolos . _ $ sin espacios en blanco.');
                     return;
                 }
 
@@ -91,7 +96,7 @@ if (isLogado()) {
                         return;
                     }
 
-                    if (!validateResponse(json, false)) {
+                    if (!validateResponse(json)) {
                         return;
                     } else {
                         window.location.href = 'index.php';

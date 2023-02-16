@@ -2,16 +2,19 @@
 <html lang="en">
 
 <?php
-include_once('inc/session.php');
+include('inc/session.php');
 include_once('inc/head.php');
 include_once('inc/scripts.php');
 include_once('inc/utility.php');
 
-$_SESSION['token'] = $token = getToken(16);
+$_SESSION['token'] = getToken(16);
 
-// if (!isLogado()) {
-//     exit;
-// }
+// esta pagina la pueden ver todos los usuarios que iniciaron sesion
+// si no se inicia sesion lo mando al index
+
+if (!isLogado()) {
+    exit;
+}
 ?>
 <title>Rainweb - perfil</title>
 
@@ -31,8 +34,8 @@ $_SESSION['token'] = $token = getToken(16);
     $nombreCompleto = ucfirst($nombre) . ' ' . ucfirst($apellido);
     $nivelAcceso = ucfirst($rol) . ' ' . ucfirst($tipologia);
     ?>
-    <!-- Modal -->
-    <div class="modal fade" id="modal-cambiar-datos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Modal actualizacion de datos -->
+    <div class="modal fade" id="modal-actualizar-datos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class=" modal-content">
                 <div class="modal-header">
@@ -40,37 +43,37 @@ $_SESSION['token'] = $token = getToken(16);
                 </div>
                 <div class="modal-body">
                     <form id="form-actualiza-datos">
-                        <input type="hidden" value=<?php echo $token ?> id="token">
+                        <input type="hidden" value=<?php echo $_SESSION['token'] ?> id="token">
                         <div class="row mb-2">
                             <div class="col">
                                 <label for="modal-nombre" class="col-form-label">Nombre:</label>
-                                <input type="text" class="form-control" value=<?php echo ucfirst($nombre) ?> id="modal-nombre" required>
+                                <input type="text" class="form-control control-input" value=<?php echo ucfirst($nombre) ?> id="modal-nombre" required>
                                 <small class="form-text">Escribe tu nombre</small>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col">
                                 <label for="modal-apellido" class="col-form-label">Apellido:</label>
-                                <input type="text" class="form-control" value=<?php echo ucfirst($apellido) ?> id="modal-apellido" required>
+                                <input type="text" class="form-control control-input" value=<?php echo ucfirst($apellido) ?> id="modal-apellido" required>
                                 <small class="form-text">Escribe tu apellido</small>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col">
                                 <label for="modal-email" class="col-form-label">Email:</label>
-                                <input type="text" class="form-control" value=<?php echo $email ?> id="modal-email">
+                                <input type="text" class="form-control control-input" value=<?php echo $email ?> id="modal-email">
                                 <small class="form-text">Escribe tu correo</small>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col-6 ">
                                 <label for="modal-username" class="col-form-label">Nombre de usuario:</label>
-                                <input type="text" class="form-control" value=<?php echo $username ?> id="modal-username">
+                                <input type="text" class="form-control control-input" value=<?php echo $username ?> id="modal-username">
                                 <small class="form-text">Escribe tu nombre de usuario</small>
                             </div>
                             <div class="col-6 ">
                                 <label for="modal-telefono" class="col-form-label">Telefono:</label>
-                                <input type="text" class="form-control" value=<?php echo $telefono ?> id="modal-telefono">
+                                <input type="text" class="form-control control-input" value=<?php echo $telefono ?> id="modal-telefono">
                                 <small class="form-text">Escribe tu telefono</small>
                             </div>
                         </div>
@@ -138,17 +141,20 @@ $_SESSION['token'] = $token = getToken(16);
         const inputEmail = $("#modal-email");
         const inputUsername = $("#modal-username");
         const inputTelefono = $("#modal-telefono");
+        const controlInput = $(".control-input");
 
         const pulsanteCambiarDatos = $("#pulsante-cambiar-datos");
         const pulsanteGuardarDatos = $("#pulsante-guardar-datos");
 
-        const modalCambiarDatos = $('#modal-cambiar-datos');
+        const modalActualizarDatos = $('#modal-actualizar-datos');
+
+        pressKey(controlInput);
 
         pulsanteCambiarDatos.on("click", function(e) {
-            modalCambiarDatos.modal('show');
+            modalActualizarDatos.modal('show');
         });
 
-        pulsanteGuardarDatos.on("click", function(e) {
+        pulsanteGuardarDatos.on("click", function() {
             const token = inputToken.val();
             const nombre = inputNombre.val();
             const apellido = inputApellido.val();
@@ -157,39 +163,39 @@ $_SESSION['token'] = $token = getToken(16);
             const telefono = inputTelefono.val();
 
             if (nombre.length == 0) {
-                message('warning', 'Introduce un nombre');
+                invalidInput(inputNombre, 'Introduce un nombre');
                 return;
             } else if (nombre.length < 3 || nombre.length > 20) {
-                message('warning', 'El nombre debe tener mas de 3 letras y menos de 20');
+                invalidInput(inputNombre, 'El nombre debe tener mas de 3 letras y menos de 20');
                 return;
             }
 
             if (apellido.length == 0) {
-                message('warning', 'Introduce un apellido');
+                invalidInput(inputApellido, 'Introduce un apellido');
                 return;
             } else if (apellido.length < 3 || apellido.length > 20) {
-                message('warning', 'El apellido debe tener mas de 3 letras y menos de 20');
+                invalidInput(inputApellido, 'El apellido debe tener mas de 3 caracteres y menos de 20');
                 return;
             }
 
             if (email.length == 0) {
-                message('warning', 'Introduce un email');
+                invalidInput(inputEmail, 'Introduce un email');
                 return;
             } else if (!validateEmail(email)) {
-                message('warning', 'Escribe un email valido');
+                invalidInput(inputEmail, 'Introduce un email valido');
                 return;
             }
 
             if (username.length == 0) {
-                message('warning', 'Introduce un nombre de usuario');
+                invalidInput(inputUsername, 'Introduce un nombre de usuario');
                 return;
             } else if (username.length < 5 || username.length > 20) {
-                message('warning', 'El nombre de usuario debe tener mas de 5 letras y menos de 20');
+                invalidInput(inputUsername, 'El nombre de usuario debe tener mas de 5 caracteres y menos de 20');
                 return;
             }
 
-            if (telefono.length < 7) {
-                message('warning', 'Introduce un numero telefonico valido o deja el campo vacio');
+            if (telefono.length < 7 && telefono.length != 0) {
+                invalidInput(inputTelefono, 'Introduce un numero valido o deja el campo vacio');
                 return;
             }
 
@@ -221,7 +227,7 @@ $_SESSION['token'] = $token = getToken(16);
                 if (!validateResponse(json)) {
                     return;
                 }
-                modalCambiarDatos.modal('hide');
+                modalActualizarDatos.modal('hide');
             });
 
         });

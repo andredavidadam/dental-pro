@@ -5,7 +5,6 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse">
-            <!-- lo hacemos bien -->
             <?php
             if (isLogado()) { ?>
                 <?php
@@ -88,14 +87,18 @@
 </div>
 
 <script>
-    function Logout() {
-        event.preventDefault();
-        $.ajax({
-            type: 'post',
-            url: 'control/control-logout.php',
-            success: function(response) {
-                window.location.href = "index.php";
-            }
+    $(document).ready(function() {
+        const itemLogout = $("#item-logout");
+
+        itemLogout.on("click", function() {
+            $.ajax({
+                url: 'control/control-logout.php',
+            }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                message('error', 'No es posible conectarse al servidor <br> Intentalo mas tarde');
+                return;
+            }).done(function(response) {
+                window.location.href = 'index.php';
+            });
         });
-    }
+    });
 </script>

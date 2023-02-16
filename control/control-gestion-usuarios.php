@@ -1,12 +1,12 @@
 <?php
-include_once("../inc/session.php");
-include_once("../inc/database.php");
-include_once("../inc/utility.php");
+include("../inc/session.php");
+include("../inc/database.php");
+include("../inc/utility.php");
 
-$token = $_POST['token'] ?? '';
-print_r($_SESSION);
-
+// print_r($_POST['token'].' = '.$_SESSION['token']);
+print_r($_POST['token'].' = '.$_SESSION['token']);
 return;
+
 $operacion = limpiarTexto($_POST['operacion'] ?? '');
 
 switch ($operacion) {
@@ -43,7 +43,7 @@ switch ($operacion) {
             response('warning', 'El username debe tener mas de 3 letras y menos de 20.');
         }
 
-        if (strlen($telefono) < 7) {
+        if (strlen($telefono) < 7 && strlen($telefono) != 0) {
             response('warning', 'Introduce un numero telefonico valido o deja el campo vacio.');
         }
 

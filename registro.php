@@ -7,11 +7,10 @@ include_once("inc/head.php");
 include_once("inc/scripts.php");
 include_once("inc/utility.php");
 
-// solo los administradores de rainweb pueden registrar a usuarios
-// los demas son redireccionados
+// si el usuario esta logado lo mando al index
 if (isLogado()) {
     header("Location: index.php");
-    return;
+    exit;
 }
 ?>
 
@@ -40,43 +39,43 @@ if (isLogado()) {
                             <div class="row">
                                 <div class="col-6">
                                     <label for="input-nombre" class="form-label">Nombre</label>
-                                    <input type="text" class="form-control control-input" id="input-nombre" minlength="3" maxlength="20" value="angelo" autofocus >
+                                    <input type="text" class="form-control control-input" id="input-nombre" autofocus>
                                     <small class="form-text">Escribe tu nombre</small>
                                 </div>
                                 <div class="col-6">
                                     <label for="input-apellido" class="form-label">Apellido</label>
-                                    <input type="text" class="form-control control-input" id="input-apellido" minlength="3" maxlength="20" value="lagroia" >
+                                    <input type="text" class="form-control control-input" id="input-apellido" value="lagroia">
                                     <small class="form-text">Escribe tu apellido</small>
                                 </div>
                             </div>
                             <div class="row mt-3 mb-3">
                                 <div class="col-12">
                                     <label for="input-email" class="form-label">Email</label>
-                                    <input type="email" class="form-control control-input" id="input-email" value="angelo@gmail.com" >
+                                    <input type="email" class="form-control control-input" id="input-email" value="angelo@gmail.com">
                                     <small class="form-text">Escribe tu email</small>
                                 </div>
                             </div>
                             <div class="row mt-3 mb-3">
                                 <div class=" col-8">
                                     <label for="input-username" class="form-label">Nombre de Usuario</label>
-                                    <input type="text" class="form-control control-input" id="input-username" minlength="3" maxlength="20" value="angelo" >
+                                    <input type="text" class="form-control control-input" id="input-username" value="angelo">
                                     <small class="form-text">Escribe tu nombre de usuario</small>
                                 </div>
                                 <div class="col-4">
                                     <label for="input-telefono" class="form-label">Telefono</label>
-                                    <input type="text" class="form-control control-input" id="input-telefono" value="123765489" >
+                                    <input type="text" class="form-control control-input" id="input-telefono" value="123765489">
                                     <small class="form-text">Escribe tu Telefono</small>
                                 </div>
                             </div>
                             <div class="row mt-3 mb-3">
                                 <div class="col-6">
                                     <label for="input-password" class="form-label">Password</label>
-                                    <input type="text" class="form-control control-input" id="input-password" minlength="10" maxlength="32" value="1234567890aa." ></input>
+                                    <input type="text" class="form-control control-input" id="input-password" value="1234567890aa."></input>
                                     <small class="form-text">Escribe tu contraseña</small>
                                 </div>
                                 <div class="col-6">
                                     <label for="input-confirm-password" class="form-label">Confirma Password</label>
-                                    <input type="text" class="form-control control-input" id="input-confirm-password" minlength="10" maxlength="32" value="1234567890aa." ></input>
+                                    <input type="text" class="form-control control-input" id="input-confirm-password" value="1234567890aa."></input>
                                     <small class="form-text">Confirma tu contraseña</small>
                                 </div>
                             </div>
@@ -100,7 +99,6 @@ if (isLogado()) {
             const inputTelefono = $("#input-telefono");
             const inputPassword = $("#input-password");
             const inputConfirmPassword = $("#input-confirm-password");
-
             const controlInput = $(".control-input");
 
             const pulsanteRegistro = $("#pulsante-registro");
@@ -117,72 +115,48 @@ if (isLogado()) {
                 const confirmPassword = inputConfirmPassword.val();
 
                 if (nombre.length == 0) {
-                    isValidInput(inputNombre, false);
-                    message('warning', 'Introduce un nombre');
+                    invalidInput(inputNombre, 'Introduce un nombre');
                     return;
                 } else if (nombre.length < 3 || nombre.length > 20) {
-                    isValidInput(inputNombre, false);
-                    message('warning', 'El nombre debe tener mas de 3 letras y menos de 20');
+                    invalidInput(inputNombre, 'El nombre debe tener mas de 3 caracteres y menos de 20');
                     return;
-                } else {
-                    isValidInput(inputNombre, true);
                 }
 
                 if (apellido.length == 0) {
-                    isValidInput(inputApellido, false);
-                    message('warning', 'Introduce un apellido');
+                    invalidInput(inputApellido, 'Introduce un apellido');
                     return;
                 } else if (apellido.length < 3 || apellido.length > 20) {
-                    isValidInput(inputApellido, false);
-                    message('warning', 'El apellido debe tener mas de 3 letras y menos de 20');
+                    invalidInput(inputApellido, 'El apellido debe tener mas de 3 caracteres y menos de 20');
                     return;
-                } else {
-                    isValidInput(inputApellido, true);
                 }
 
                 if (email.length == 0) {
-                    isValidInput(inputEmail, false);
-                    message('warning', 'Introduce un email');
+                    invalidInput(inputEmail, 'Introduce un email');
                     return;
                 } else if (!validateEmail(email)) {
-                    isValidInput(inputEmail, false);
-                    message('warning', 'Escribe un email valido');
+                    invalidInput(inputEmail, 'Introduce un email valido');
                     return;
-                } else {
-                    isValidInput(inputEmail, true);
                 }
 
                 if (username.length == 0) {
-                    isValidInput(inputUsername, false);
-                    message('warning', 'Introduce un nombre de usuario');
+                    invalidInput(inputUsername, 'Introduce un nombre de usuario');
                     return;
                 } else if (username.length < 5 || username.length > 20) {
-                    isValidInput(inputUsername, false);
-                    message('warning', 'El nombre de usuario debe tener mas de 5 letras y menos de 20');
+                    invalidInput(inputUsername, 'El nombre de usuario debe tener mas de 5 caracteres y menos de 20');
                     return;
-                } else {
-                    isValidInput(inputUsername, true);
                 }
 
-                if (telefono.length < 7) {
-                    isValidInput(inputTelefono, false);
-                    message('warning', 'Introduce un numero telefonico valido o deja el campo vacio');
+                if (telefono.length < 7 && telefono.length != 0) {
+                    invalidInput(inputTelefono, 'Introduce un numero valido o deja el campo vacio');
                     return;
-                } else {
-                    isValidInput(inputTelefono, true);
                 }
 
                 if (!validatePassword(password)) {
-                    isValidInput(inputPassword, false);
-                    message('warning', 'Introduce una contraseña de almenos 10 caracteres con letras y numeros y los simbolos ". _ $" sin espacios en blanco.');
+                    invalidInput(inputPassword, 'Introduce una contraseña de almenos 10 caracteres con letras y numeros y los simbolos . _ $ sin espacios en blanco.');
                     return;
                 } else if (password !== confirmPassword) {
-                    isValidInput(inputConfirmPassword, false);
-                    message('warning', 'Las contraseñas no coinciden');
+                    invalidInput(inputConfirmPassword, 'Las contraseñas no coinciden');
                     return;
-                } else {
-                    isValidInput(inputPassword, true);
-                    isValidInput(inputConfirmPassword, true);
                 }
 
                 $.ajax({
@@ -205,15 +179,15 @@ if (isLogado()) {
                     try {
                         var json = JSON.parse(response);
                     } catch (e) {
-                        message('error', 'Hubo un error al procesar los datos');
+                        message('error', 'Hubo un error al procesar los datos [ ' + e + ' ]');
                         return;
                     }
 
-                    if (!validateResponse(json, false)) {
+                    if (!validateResponse(json)) {
                         return;
                     }
-                    
-                    
+
+
                     $.confirm({
                         icon: 'bi bi-check-circle-fill',
                         title: 'Bien hecho!',

@@ -134,7 +134,7 @@
     }
 
     // funcion que analiza el response recibido desde ajax en caso de error
-    function validateResponse(json, modalSuccess = true) {
+    function validateResponse(json) {
         let isValid = false;
         switch (json['status']) {
             case 'info':
@@ -147,9 +147,6 @@
                 message('error', json['mensaje']);
                 break;
             case 'success':
-                if (modalSuccess) {
-                    message('success', json['mensaje']);
-                }
                 isValid = true;
                 break;
         }
@@ -157,15 +154,11 @@
     }
     // funcion que agrega la visualizacion para un campo 
     // llenado correctamente o no
-    function isValidInput(input, status) {
-        if (status) {
-            input.removeClass("is-invalid");
-            input.addClass("is-valid");
-        } else {
-            input.removeClass("is-valid");
-            input.addClass("is-invalid");
-            input.focus();
-        }
+    function invalidInput(input, mensaje) {
+        message('warning', mensaje);
+        input.addClass("is-invalid");
+        input.focus();
+
     }
 
     // limpia el campo input si este es modificado
@@ -173,7 +166,6 @@
         input.each(function() {
             $(this).keyup(function(e) {
                 $(this).removeClass("is-invalid");
-                $(this).removeClass("is-valid");
             });
         });
     }
@@ -181,8 +173,6 @@
     // limpia los campos del formulario
     function cleanForm(input) {
         input.each(function() {
-            $(this).removeClass("is-invalid");
-            $(this).removeClass("is-valid");
             $(this).val('');
         });
     }
