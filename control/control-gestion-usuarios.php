@@ -3,16 +3,16 @@ include("../inc/session.php");
 include("../inc/database.php");
 include("../inc/utility.php");
 
-// print_r($_POST['token'].' = '.$_SESSION['token']);
-print_r($_POST['token'].' = '.$_SESSION['token']);
-return;
+if (!validateToken($_POST['token'])) {
+    exit;
+}
 
 $operacion = limpiarTexto($_POST['operacion'] ?? '');
 
 switch ($operacion) {
     case 'actualizarDatos':
-        $nombre = limpiarTexto($_POST['nombre'] ?? '');
-        $apellido = limpiarTexto($_POST['apellido'] ?? '');
+        $nombre = limpiarTexto(strtolower($_POST['nombre'] ?? ''));
+        $apellido = limpiarTexto(strtolower($_POST['apellido'] ?? ''));
         $email = limpiarTexto($_POST['email'] ?? '');
         $username = limpiarTexto($_POST['username'] ?? '');
         $telefono = limpiarTexto($_POST['telefono'] ?? '');
@@ -48,25 +48,42 @@ switch ($operacion) {
         }
 
         // control sobre los datos existentes
-        $sql = "SELECT username FROM usuario WHERE username = '$username';";
-        $loop = mysqli_query($dbDentalPro, $sql);
-        $rowCount = mysqli_num_rows($loop);
-        if ($rowCount > 0) {
-            response('warning', 'Nombre de usuario ya existente.');
+        if ($username != $username_session) {
+            $sql = "SELECT username FROM usuario WHERE username = '$username';";
+            $loop = mysqli_query($dbDentalPro, $sql);
+            $rowCount = mysqli_num_rows($loop);
+            if ($rowCount > 0) {
+                response('warning', 'Nombre de usuario ya existente.');
+            }
         }
 
-        $sql = "SELECT email FROM usuario WHERE email = '$email';";
-        $loop = mysqli_query($dbDentalPro, $sql);
-        $rowCount = mysqli_num_rows($loop);
-        if ($rowCount > 0) {
-            response('warning', 'El correo ya esta registrado.');
+        if ($email != $email_session) {
+            $sql = "SELECT email FROM usuario WHERE email = '$email';";
+            $loop = mysqli_query($dbDentalPro, $sql);
+            $rowCount = mysqli_num_rows($loop);
+            if ($rowCount > 0) {
+                response('warning', 'El correo ya esta registrado.');
+            }
         }
 
         $oldUsername = $username_session;
         $sql = "UPDATE usuario SET nombre = '$nombre', apellido = '$apellido', email = '$email', username = '$username', telefono= '$telefono' WHERE id = $id_usuario_session;";
         mysqli_query($dbDentalPro, $sql);
         setLog(Operacion::CambioUsuario, "El usuario $oldUsername actualizo sus datos personales");
-        response('success', 'Los datos se actualizaron correctamente');
+
+        $sql = "SELECT username, nombre, apellido, email, telefono, tipologia, rol FROM usuario WHERE id = $id_usuario_session;";
+        $loop = mysqli_query($dbDentalPro, $sql);
+        while ($row = mysqli_fetch_assoc($loop)) {
+            $username = $row['username'];
+            $nombreCompleto = ucfirst($row['nombre']) . ' ' . ucfirst($row['apellido']);
+            $email = $row['email'];
+            $telefono = $row['telefono'];
+            $nivelAcceso = ucfirst($row['rol']) . ' ' . ucfirst($row['tipologia']);
+        }
+
+        $arrayResponse = ['nombreApellido' => $nombreCompleto, 'username' => $username,'email'=>$email,'telefono'=>$telefono,'nivelAcceso'=>$nivelAcceso];
+
+        response('success', 'Los datos se actualizaron correctamente',$arrayResponse);
         exit;
     default:
         response('error', 'operacion inexistente');

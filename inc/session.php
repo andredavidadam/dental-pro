@@ -41,6 +41,6 @@ if (isset($_SESSION['id_usuario']) && isset($_SESSION['is_logado'])) {
     session_unset();
 }
 
-session_write_close();
+//session_write_close();
 
 

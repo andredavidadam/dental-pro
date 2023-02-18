@@ -7,7 +7,7 @@ include_once('inc/head.php');
 include_once('inc/scripts.php');
 include_once('inc/utility.php');
 
-$_SESSION['token'] = getToken(16);
+$_SESSION['token'] = $token_session = getToken(16);
 
 // esta pagina la pueden ver todos los usuarios que iniciaron sesion
 // si no se inicia sesion lo mando al index
@@ -43,7 +43,7 @@ if (!isLogado()) {
                 </div>
                 <div class="modal-body">
                     <form id="form-actualiza-datos">
-                        <input type="hidden" value=<?php echo $_SESSION['token'] ?> id="token">
+                        <input type="hidden" value=<?php echo $token_session ?> id="token">
                         <div class="row mb-2">
                             <div class="col">
                                 <label for="modal-nombre" class="col-form-label">Nombre:</label>
@@ -77,6 +77,34 @@ if (!isLogado()) {
                                 <small class="form-text">Escribe tu telefono</small>
                             </div>
                         </div>
+                        <?php
+                        // echo $tipologia_session."  ".$rol_session;  ol::Rainweb['administrador']
+                        if ($tipologia_session === Tipologia::Rainweb && $rol_session === Rol::Administrador) {
+                        ?>
+                            <div class="row mb-2">
+                                <div class="col-6 ">
+                                    <label for="modal-tipologia" class="col-form-label">Tipologia</label>
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option value='' selected>Ninguna</option>
+                                        <option value=<?php Tipologia::Rainweb ?>>Rainweb</option>
+                                        <option value=<?php Tipologia::DentalPro ?>>DentalPro</option>
+                                    </select>
+                                    <small class="form-text">Selecciona una tipologia</small>
+                                </div>
+                                <div class="col-6 ">
+                                    <label for="modal-telefono" class="col-form-label">Telefono:</label>
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option value='' selected>Ninguna</option>
+                                        <option value=<?php Rol::Administrador ?>>Administrador</option>
+                                        <option value=<?php Rol::Manager ?>>Manager</option>
+                                        <option value=<?php Rol::Usuario ?>>Usuario</option>
+                                    </select>
+                                    <small class="form-text">Escribe tu telefono</small>
+                                </div>
+                            </div>
+                        <?php
+                        }
+                        ?>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -115,15 +143,15 @@ if (!isLogado()) {
                     $nivelAcceso = ucfirst($row['rol']) . ' ' . ucfirst($row['tipologia']);
                 }
                 ?>
-                <h3 class="text-primary"><?php echo $nombreCompleto ?></h3>
-                <p class="text-muted fw-normal mb-2"><?php echo $nivelAcceso ?></p>
+                <h3 class="text-primary" id="nombre-apellido"><?php echo $nombreCompleto ?></h3>
+                <p class="text-muted fw-normal mb-2" id="nivel-acceso"><?php echo $nivelAcceso ?></p>
                 <hr>
                 <label class="form-label" for="username">Nombre de Usuario</label>
-                <p id="username"><b><?php echo $username ?></b></p>
+                <p><b id="username"><?php echo $username ?></b></p>
                 <label class="form-label" for="email">email</label>
-                <p id="email"><b><?php echo $email ?></b></p>
+                <p><b id="email"><?php echo $email ?></b></p>
                 <label class="form-label" for="email">telefono</label>
-                <p id="email"><b><?php echo $telefono ?></b></p>
+                <p><b id="telefono"><?php echo $telefono ?></b></p>
                 <div class="row">
                     <div class="col">
                         <button type="button" class="btn btn-info mt-3 ms-3 me-3" id="pulsante-cambiar-datos">Modificar Datos</button>
@@ -142,6 +170,12 @@ if (!isLogado()) {
         const inputUsername = $("#modal-username");
         const inputTelefono = $("#modal-telefono");
         const controlInput = $(".control-input");
+
+        const nombreApellido = $("#nombre-apellido");
+        const nivelAcceso = $("#nivel-acceso");
+        const username = $("#username");
+        const email = $("#email");
+        const telefono = $("#telefono");
 
         const pulsanteCambiarDatos = $("#pulsante-cambiar-datos");
         const pulsanteGuardarDatos = $("#pulsante-guardar-datos");
@@ -215,8 +249,6 @@ if (!isLogado()) {
                 message('error', 'No es posible conectarse al servidor <br> Intentalo mas tarde');
                 return;
             }).done(function(response) {
-                console.log(response);
-                return;
                 try {
                     var json = JSON.parse(response);
                 } catch (e) {
@@ -227,7 +259,40 @@ if (!isLogado()) {
                 if (!validateResponse(json)) {
                     return;
                 }
-                modalActualizarDatos.modal('hide');
+
+                // message('success', 'Los datos se actualizaron correctamente');
+                // modalActualizarDatos.modal('hide');
+                // nombreApellido.val(json['datos']['nombreApellido']);
+                // username.val(json['datos']['username']);
+                // email.val(json['datos']['email']);
+                // telefono.val(json['datos']['telefono']);
+                // nivelAcceso.val(json['datos']['nivelAcceso']);
+
+                $.confirm({
+                    icon: 'bi bi-check-circle-fill',
+                    title: 'Bien hecho!',
+                    content: 'Los datos se actualizaron correctamente',
+                    type: 'green',
+                    typeAnimated: true,
+                    buttons: {
+                        ok: {
+                            text: 'Ok',
+                            btnClass: 'btn-green',
+                            action: function() {
+                                modalActualizarDatos.modal('hide');
+                                $("#nombre-apellido").text(json['datos']['nombreApellido']);
+                                $("#nivel-acceso").text(json['datos']['username']);
+                                $("#username").text(json['datos']['email']);
+                                $("#email").text(json['datos']['telefono']);
+                                $("#telefono").text(json['datos']['nivelAcceso']);
+                            }
+                        }
+                    }
+                });
+
+
+
+
             });
 
         });

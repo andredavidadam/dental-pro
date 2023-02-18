@@ -35,8 +35,21 @@ abstract class Tipologia
 
 abstract class Rol
 {
-    const Rainweb = ['' => 1, 'usuario' => 2, 'manager' => 3,  'administrador' => 4];
-    const DentalPro = ['' => 1, 'usuario' => 2,  'manager' => 3, 'administrador' => 4];
+    const Administrador = 'administrador';
+    const Manager = 'manager';
+    const Usuario = 'usuario';
+
+    static function getOperazioni()
+    {
+        $classe = new ReflectionClass(__CLASS__);
+        return $classe->getConstants();
+    }
+}
+
+abstract class AccessLevel
+{
+    const Rainweb = ['' => 1, Rol::Usuario => 2, Rol::Manager => 3,  Rol::Administrador => 4];
+    const DentalPro = ['' => 1, Rol::Usuario => 2, Rol::Manager => 3,  Rol::Administrador => 4];
 
     static function getOperazioni()
     {
@@ -154,16 +167,16 @@ function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'index.php', $idC
     switch ($tipologia_session) {
         case Tipologia::Rainweb:
             // obtengo el valor del rol del permiso
-            $idRolSession = Rol::Rainweb[$rol_session];
+            $idRolSession = AccessLevel::Rainweb[$rol_session];
             $rolPermiso = $arrayTipologiaPermitida[Tipologia::Rainweb];
-            $idRolPermiso = Rol::Rainweb[$rolPermiso];
+            $idRolPermiso = AccessLevel::Rainweb[$rolPermiso];
             break;
 
         case Tipologia::DentalPro:
             // obtengo el valor del rol del permiso
-            $idRolSession = Rol::DentalPro[$rol_session];
+            $idRolSession = AccessLevel::DentalPro[$rol_session];
             $rolPermiso = $arrayTipologiaPermitida[Tipologia::DentalPro];
-            $idRolPermiso = Rol::DentalPro[$rolPermiso];
+            $idRolPermiso = AccessLevel::DentalPro[$rolPermiso];
             break;
 
         default:
@@ -205,10 +218,10 @@ function isLogado()
 }
 
 // funcion que valida el token para formularios
-function validateToken($token_session)
+function validateToken($token)
 {
     $validToken = false;
-    if ($token_session === $_SESSION['token']) {
+    if ($token === $_SESSION['token']) {
         $validToken = true;
     } else {
         SetLog(Operacion::Seguridad, 'Envio de formulario con token invalido [' . GetIP() . ']');
