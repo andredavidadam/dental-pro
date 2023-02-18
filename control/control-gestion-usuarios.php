@@ -81,9 +81,43 @@ switch ($operacion) {
             $nivelAcceso = ucfirst($row['rol']) . ' ' . ucfirst($row['tipologia']);
         }
 
-        $arrayResponse = ['nombreApellido' => $nombreCompleto, 'username' => $username,'email'=>$email,'telefono'=>$telefono,'nivelAcceso'=>$nivelAcceso];
+        $arrayResponse = ['nombreApellido' => $nombreCompleto, 'username' => $username, 'email' => $email, 'telefono' => $telefono, 'nivelAcceso' => $nivelAcceso];
 
-        response('success', 'Los datos se actualizaron correctamente',$arrayResponse);
+        response('success', 'Los datos se actualizaron correctamente', $arrayResponse);
+        exit;
+    case 'actualizarPassword':
+        $passwordActual = limpiarTexto($_POST['passwordActual'] ?? '');
+        $nuevaPassword = limpiarTexto($_POST['nuevaPassword'] ?? '');
+        $confirmaNuevaPassword = limpiarTexto($_POST['confirmaNuevaPassword'] ?? '');
+
+        // controlo si las contraseñas nuevas son iguales
+        $regex = '/^(?=.*[A-Za-z])(?=.*\d)(?=.*[\.\_\$]).{10,32}$/';
+        if (!preg_match($regex, $nuevaPassword)) {
+            response('warning', 'Introduce una contraseña de almenos 10 caracteres con letras y numeros y los simbolos ". _ $" sin espacios en blanco.');
+        } else if ($nuevaPassword !== $confirmaNuevaPassword) {
+            response('warning', 'Las contraseñas no coinciden.');
+        }
+
+        $sql = "SELECT password FROM usuario WHERE username = '$username_session';";
+        $loop = mysqli_query($dbDentalPro, $sql);
+        while ($row = mysqli_fetch_assoc($loop)) {
+            $passwordHash = $row['password'] ?? '';
+        }
+        if ($passwordHash == "") {
+            response('warning', 'usuario incorrecto');
+        }
+
+        // controlo si la password es correcta
+        if (!password_verify($passwordActual, $passwordHash)) {
+            response('warning', 'password incorrecta');
+        }
+
+        $nuevaPasswordHash = password_hash($nuevaPassword, PASSWORD_DEFAULT);
+
+        setLog(Operacion::CambioUsuario, "El usuario $username_session cambio su contraseña");
+        $sql = "UPDATE usuario SET password = $nuevaPasswordHash WHERE id = $id_usuario_session;";
+        //mysqli_query($dbDentalPro, $sql);
+        response('success', 'Se actualizo la password correctamente');
         exit;
     default:
         response('error', 'operacion inexistente');

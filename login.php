@@ -9,7 +9,7 @@ include_once('inc/utility.php');
 
 // si el usuario esta logado lo mando al index
 if (isLogado()) {
-    header("Location: index.php");
+    goToPage('index.php');
     exit;
 }
 ?>

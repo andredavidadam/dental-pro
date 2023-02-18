@@ -13,7 +13,7 @@ abstract class Operacion
     const Backend = "Backend";
     const Seguridad = "Seguridad";
 
-    static function getOperazioni()
+    static function getOperaciones()
     {
         $classe = new ReflectionClass(__CLASS__);
         return $classe->getConstants();
@@ -26,7 +26,7 @@ abstract class Tipologia
     const DentalPro = "dentalpro";
 
 
-    static function getOperazioni()
+    static function getTipologias()
     {
         $classe = new ReflectionClass(__CLASS__);
         return $classe->getConstants();
@@ -39,7 +39,7 @@ abstract class Rol
     const Manager = 'manager';
     const Usuario = 'usuario';
 
-    static function getOperazioni()
+    static function getRoles()
     {
         $classe = new ReflectionClass(__CLASS__);
         return $classe->getConstants();
@@ -51,7 +51,7 @@ abstract class AccessLevel
     const Rainweb = ['' => 1, Rol::Usuario => 2, Rol::Manager => 3,  Rol::Administrador => 4];
     const DentalPro = ['' => 1, Rol::Usuario => 2, Rol::Manager => 3,  Rol::Administrador => 4];
 
-    static function getOperazioni()
+    static function getAccessLevels()
     {
         $classe = new ReflectionClass(__CLASS__);
         return $classe->getConstants();
@@ -139,7 +139,7 @@ function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'index.php', $idC
     // si el db no esta disponible lo mando al index
     if (!$dbDentalPro) {
         echo "<script>alert('Hubo un problema con el servidor... Intentalo mas tarde');</script>";
-        header("Location: index.php");
+        goToPage($urlPermisoNegado);
         exit;
     }
 
@@ -147,18 +147,18 @@ function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'index.php', $idC
     if (!isLogado()) {
         SetLog(Operacion::Seguridad, 'se intento acceder de forma invalida con una session no iniciada [' . GetIP() . ']');
         echo "<script>alert('no tienes permiso para acceder a esta pagina');</script>";
-        header("Location: index.php");
+        goToPage($urlPermisoNegado);
         exit;
     }
 
     // si se llega hasta aqui, la session se inicio correctamente
 
-    // si la tipologia de la session no esta en el permiso lo mando al dashboard
+    // si la tipologia de la session no esta en el permiso lo mando al index
     // tambien redirecciono en el caso que no tenga una tipologia y rol en el bd
     if (!array_key_exists($tipologia_session, $arrayTipologiaPermitida)) {
         SetLog(Operacion::Seguridad, "$username_session intento acceder con una tipologia invalida  [" . GetIP() . "]");
         echo "<script>alert('no tienes permiso para acceder a esta pagina');</script>";
-        header("Location: $urlPermisoNegado");
+        goToPage($urlPermisoNegado);
         exit;
     }
 
@@ -182,7 +182,7 @@ function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'index.php', $idC
         default:
             SetLog(Operacion::Seguridad, "$username_session intento acceder con una tipologia inexistente  [" . GetIP() . "]");
             echo "<script>alert('no tienes permiso para acceder a esta pagina');</script>";
-            header("Location: $urlPermisoNegado");
+            goToPage($urlPermisoNegado);
             exit;
     }
 
@@ -190,7 +190,7 @@ function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'index.php', $idC
     if ($idRolSession < $idRolPermiso) {
         SetLog(Operacion::Acceso, "$username_session intento acceder a una pagina restringida  [" . GetIP() . "]");
         echo "<script>alert('no tienes permiso para acceder a esta pagina');</script>";
-        header("Location: $urlPermisoNegado");
+        goToPage($urlPermisoNegado);
         exit;
     }
 }
@@ -227,4 +227,9 @@ function validateToken($token)
         SetLog(Operacion::Seguridad, 'Envio de formulario con token invalido [' . GetIP() . ']');
     }
     return $validToken;
+}
+
+function goToPage($url)
+{
+    echo "<script>window.location.href = '" . $url . "';</script>";
 }

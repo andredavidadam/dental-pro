@@ -8,8 +8,9 @@ include_once("inc/scripts.php");
 include_once("inc/utility.php");
 
 // si el usuario esta logado lo mando al index
+// no es posible registrar un usuario mientras si se inicio sesion
 if (isLogado()) {
-    header("Location: index.php");
+    goToPage('index.php');
     exit;
 }
 ?>
@@ -115,39 +116,39 @@ if (isLogado()) {
                 const confirmPassword = inputConfirmPassword.val();
 
                 if (nombre.length == 0) {
-                    invalidInput(inputNombre, 'Introduce un nombre');
+                    invalidInput([inputNombre], 'Introduce un nombre');
                     return;
                 } else if (nombre.length < 3 || nombre.length > 20) {
-                    invalidInput(inputNombre, 'El nombre debe tener mas de 3 caracteres y menos de 20');
+                    invalidInput([inputNombre], 'El nombre debe tener mas de 3 caracteres y menos de 20');
                     return;
                 }
 
                 if (apellido.length == 0) {
-                    invalidInput(inputApellido, 'Introduce un apellido');
+                    invalidInput([inputApellido], 'Introduce un apellido');
                     return;
                 } else if (apellido.length < 3 || apellido.length > 20) {
-                    invalidInput(inputApellido, 'El apellido debe tener mas de 3 caracteres y menos de 20');
+                    invalidInput([inputApellido], 'El apellido debe tener mas de 3 caracteres y menos de 20');
                     return;
                 }
 
                 if (email.length == 0) {
-                    invalidInput(inputEmail, 'Introduce un email');
+                    invalidInput([inputEmail], 'Introduce un email');
                     return;
                 } else if (!validateEmail(email)) {
-                    invalidInput(inputEmail, 'Introduce un email valido');
+                    invalidInput([inputEmail], 'Introduce un email valido');
                     return;
                 }
 
                 if (username.length == 0) {
-                    invalidInput(inputUsername, 'Introduce un nombre de usuario');
+                    invalidInput([inputUsername], 'Introduce un nombre de usuario');
                     return;
                 } else if (username.length < 5 || username.length > 20) {
-                    invalidInput(inputUsername, 'El nombre de usuario debe tener mas de 5 caracteres y menos de 20');
+                    invalidInput([inputUsername], 'El nombre de usuario debe tener mas de 5 caracteres y menos de 20');
                     return;
                 }
 
                 if (telefono.length < 7 && telefono.length != 0) {
-                    invalidInput(inputTelefono, 'Introduce un numero valido o deja el campo vacio');
+                    invalidInput([inputTelefono], 'Introduce un numero valido o deja el campo vacio');
                     return;
                 }
 
@@ -155,7 +156,7 @@ if (isLogado()) {
                     invalidInput(inputPassword, 'Introduce una contraseña de almenos 10 caracteres con letras y numeros y los simbolos . _ $ sin espacios en blanco.');
                     return;
                 } else if (password !== confirmPassword) {
-                    invalidInput(inputConfirmPassword, 'Las contraseñas no coinciden');
+                    invalidInput([inputPassword, inputConfirmPassword], 'Las contraseñas no coinciden');
                     return;
                 }
 

@@ -7,14 +7,13 @@ include_once('inc/head.php');
 include_once('inc/scripts.php');
 include_once('inc/utility.php');
 
-$_SESSION['token'] = $token_session = getToken(16);
-
 // esta pagina la pueden ver todos los usuarios que iniciaron sesion
 // si no se inicia sesion lo mando al index
-
 if (!isLogado()) {
+    goToPage('index.php');
     exit;
 }
+$_SESSION['token'] = $token_session = getToken(16);
 ?>
 <title>Rainweb - perfil</title>
 
@@ -35,26 +34,26 @@ if (!isLogado()) {
     $nivelAcceso = ucfirst($rol) . ' ' . ucfirst($tipologia);
     ?>
     <!-- Modal actualizacion de datos -->
-    <div class="modal fade" id="modal-actualizar-datos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modal-cambiar-datos" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class=" modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Actualiza tus datos</h5>
                 </div>
                 <div class="modal-body">
-                    <form id="form-actualiza-datos">
+                    <form>
                         <input type="hidden" value=<?php echo $token_session ?> id="token">
                         <div class="row mb-2">
                             <div class="col">
                                 <label for="modal-nombre" class="col-form-label">Nombre:</label>
-                                <input type="text" class="form-control control-input" value=<?php echo ucfirst($nombre) ?> id="modal-nombre" required>
+                                <input type="text" class="form-control control-input" value=<?php echo ucfirst($nombre) ?> id="modal-nombre">
                                 <small class="form-text">Escribe tu nombre</small>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col">
                                 <label for="modal-apellido" class="col-form-label">Apellido:</label>
-                                <input type="text" class="form-control control-input" value=<?php echo ucfirst($apellido) ?> id="modal-apellido" required>
+                                <input type="text" class="form-control control-input" value=<?php echo ucfirst($apellido) ?> id="modal-apellido">
                                 <small class="form-text">Escribe tu apellido</small>
                             </div>
                         </div>
@@ -78,26 +77,32 @@ if (!isLogado()) {
                             </div>
                         </div>
                         <?php
-                        // echo $tipologia_session."  ".$rol_session;  ol::Rainweb['administrador']
-                        if ($tipologia_session === Tipologia::Rainweb && $rol_session === Rol::Administrador) {
+                        // para gestion usuarios
+                        //if ($tipologia_session === Tipologia::Rainweb && $rol_session === Rol::Administrador) {
+                        if (1 == 0) {
                         ?>
                             <div class="row mb-2">
                                 <div class="col-6 ">
                                     <label for="modal-tipologia" class="col-form-label">Tipologia</label>
                                     <select class="form-select" aria-label="Default select example">
-                                        <option value='' selected>Ninguna</option>
-                                        <option value=<?php Tipologia::Rainweb ?>>Rainweb</option>
-                                        <option value=<?php Tipologia::DentalPro ?>>DentalPro</option>
+                                        <option value="">Ninguna Tipologia</option>
+                                        <?php
+                                        foreach (Tipologia::getTipologias() as $key => $value) {
+                                            echo "<option value='$value'>" . $key . "</option>";
+                                        }
+                                        ?>
                                     </select>
                                     <small class="form-text">Selecciona una tipologia</small>
                                 </div>
                                 <div class="col-6 ">
                                     <label for="modal-telefono" class="col-form-label">Telefono:</label>
                                     <select class="form-select" aria-label="Default select example">
-                                        <option value='' selected>Ninguna</option>
-                                        <option value=<?php Rol::Administrador ?>>Administrador</option>
-                                        <option value=<?php Rol::Manager ?>>Manager</option>
-                                        <option value=<?php Rol::Usuario ?>>Usuario</option>
+                                        <option value="">Ningun Rol</option>
+                                        <?php
+                                        foreach (Rol::getRoles() as $key => $value) {
+                                            echo "<option value='$value'>" . $key . "</option>";
+                                        }
+                                        ?>
                                     </select>
                                     <small class="form-text">Escribe tu telefono</small>
                                 </div>
@@ -114,7 +119,50 @@ if (!isLogado()) {
             </div>
         </div>
     </div>
-    <!-- fine modal -->
+    <!-- fine modal actualizar datos -->
+
+    <!-- modal cambiar contraseña -->
+    <div class="modal fade" id="modal-cambiar-password" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class=" modal-content">
+                <div class="row modal-header text-center">
+                    <h5 class="modal-title">Actualiza tu contraseña</h5>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <input type="hidden" value=<?php echo $token_session; ?> id="token-password">
+                        <div class="row mb-2">
+                            <div class="col">
+                                <label for="modal-password-actual" class="col-form-label">Password Actual:</label>
+                                <input type="text" class="form-control control-input" id="modal-password-actual">
+                                <small class="form-text">Escribe tu contraseña actual</small>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col">
+                                <label for="modal-nueva-password" class="col-form-label">Nueva Password</label>
+                                <input type="text" class="form-control control-input" id="modal-nueva-password">
+                                <small class="form-text">Escribe una nueva contraseña </small>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col">
+                                <label for="modal-confirma-nueva-password" class="col-form-label">Confirma nueva Password</label>
+                                <input type="text" class="form-control control-input" id="modal-confirma-nueva-password">
+                                <small class="form-text">Confirma tu contraseña nueva</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="pulsante-guardar-password">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- fine modal cambiar contraseña -->
+
     <?php include_once('componentes/componente-navbar-menu.php'); ?>
     <div class="container">
         <section class="hero-2 position-relative">
@@ -163,29 +211,41 @@ if (!isLogado()) {
 </body>
 <script>
     $(document).ready(function() {
+        // datos de usuario
+        const nombreApellido = $("#nombre-apellido");
+        const nivelAcceso = $("#nivel-acceso");
+        const username = $("#username");
+        const email = $("#email");
+        const telefono = $("#telefono");
+        const pulsanteCambiarDatos = $("#pulsante-cambiar-datos");
+        const pulsanteCambiarPassword = $("#pulsante-cambiar-password");
+
+        // modal cambiar datos
         const inputToken = $("#token");
         const inputNombre = $("#modal-nombre");
         const inputApellido = $("#modal-apellido");
         const inputEmail = $("#modal-email");
         const inputUsername = $("#modal-username");
         const inputTelefono = $("#modal-telefono");
-        const controlInput = $(".control-input");
-
-        const nombreApellido = $("#nombre-apellido");
-        const nivelAcceso = $("#nivel-acceso");
-        const username = $("#username");
-        const email = $("#email");
-        const telefono = $("#telefono");
-
-        const pulsanteCambiarDatos = $("#pulsante-cambiar-datos");
         const pulsanteGuardarDatos = $("#pulsante-guardar-datos");
+        const modalCambiarDatos = $('#modal-cambiar-datos');
 
-        const modalActualizarDatos = $('#modal-actualizar-datos');
+        // modal cambiar password
+        const inputTokenPassword = $("#token-password");
+        const inputPasswordActual = $("#modal-password-actual");
+        const inputNuevaPassword = $("#modal-nueva-password");
+        const inputConfirmaNuevaPassword = $("#modal-confirma-nueva-password");
+        const pulsanteGuardarPassword = $("#pulsante-guardar-password");
+        const modalCambiarPassword = $('#modal-cambiar-password');
 
-        pressKey(controlInput);
+        pressKey($(".control-input"));
 
         pulsanteCambiarDatos.on("click", function(e) {
-            modalActualizarDatos.modal('show');
+            modalCambiarDatos.modal('show');
+        });
+
+        pulsanteCambiarPassword.on("click", function(e) {
+            modalCambiarPassword.modal('show');
         });
 
         pulsanteGuardarDatos.on("click", function() {
@@ -260,14 +320,6 @@ if (!isLogado()) {
                     return;
                 }
 
-                // message('success', 'Los datos se actualizaron correctamente');
-                // modalActualizarDatos.modal('hide');
-                // nombreApellido.val(json['datos']['nombreApellido']);
-                // username.val(json['datos']['username']);
-                // email.val(json['datos']['email']);
-                // telefono.val(json['datos']['telefono']);
-                // nivelAcceso.val(json['datos']['nivelAcceso']);
-
                 $.confirm({
                     icon: 'bi bi-check-circle-fill',
                     title: 'Bien hecho!',
@@ -279,12 +331,71 @@ if (!isLogado()) {
                             text: 'Ok',
                             btnClass: 'btn-green',
                             action: function() {
-                                modalActualizarDatos.modal('hide');
+                                modalCambiarDatos.modal('hide');
                                 $("#nombre-apellido").text(json['datos']['nombreApellido']);
-                                $("#nivel-acceso").text(json['datos']['username']);
-                                $("#username").text(json['datos']['email']);
-                                $("#email").text(json['datos']['telefono']);
-                                $("#telefono").text(json['datos']['nivelAcceso']);
+                                $("#nivel-acceso").text(json['datos']['nivelAcceso']);
+                                $("#username").text(json['datos']['username']);
+                                $("#email").text(json['datos']['email']);
+                                $("#telefono").text(json['datos']['telefono']);
+                            }
+                        }
+                    }
+                });
+            });
+
+        });
+
+        pulsanteGuardarPassword.on("click", function() {
+            const tokenPassword = inputTokenPassword.val();
+            const passwordActual = inputPasswordActual.val();
+            const nuevaPassword = inputNuevaPassword.val();
+            const confirmaNuevaPassword = inputConfirmaNuevaPassword.val();
+
+            if (!validatePassword(nuevaPassword)) {
+                invalidInput([inputNuevaPassword], 'Introduce una contraseña de almenos 10 caracteres con letras y numeros y los simbolos . _ $ sin espacios en blanco.');
+                return;
+            } else if (nuevaPassword !== confirmaNuevaPassword) {
+                invalidInput([inputNuevaPassword, inputConfirmaNuevaPassword], 'Las contraseñas no coinciden');
+                return;
+            }
+
+            $.ajax({
+                url: "control/control-gestion-usuarios.php",
+                type: "POST",
+                data: {
+                    "operacion": "actualizarPassword",
+                    "token": tokenPassword,
+                    "passwordActual": passwordActual,
+                    "nuevaPassword": nuevaPassword,
+                    "confirmaNuevaPassword": confirmaNuevaPassword
+                },
+            }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                message('error', 'No es posible conectarse al servidor <br> Intentalo mas tarde');
+                return;
+            }).done(function(response) {
+                try {
+                    var json = JSON.parse(response);
+                } catch (e) {
+                    message('error', 'Hubo un error al procesar los datos');
+                    return;
+                }
+
+                if (!validateResponse(json)) {
+                    return;
+                }
+
+                $.confirm({
+                    icon: 'bi bi-check-circle-fill',
+                    title: 'Bien hecho!',
+                    content: 'La password se actualizo correctamente',
+                    type: 'green',
+                    typeAnimated: true,
+                    buttons: {
+                        ok: {
+                            text: 'Ok',
+                            btnClass: 'btn-green',
+                            action: function() {
+                                modalCambiarPassword.modal('hide');
                             }
                         }
                     }
@@ -294,7 +405,6 @@ if (!isLogado()) {
 
 
             });
-
         });
     });
 </script>

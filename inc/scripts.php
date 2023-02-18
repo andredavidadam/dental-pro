@@ -154,10 +154,12 @@
     }
     // funcion que agrega la visualizacion para un campo 
     // llenado correctamente o no
-    function invalidInput(input, mensaje) {
+    function invalidInput(arrayInput, mensaje) {
         message('warning', mensaje);
-        input.addClass("is-invalid");
-        input.focus();
+        for (var i = 0; i < arrayInput.length; i++) {
+            arrayInput[i].addClass("is-invalid"); // muestra cada elemento del array
+        }
+        arrayInput[0].focus();
 
     }
 
