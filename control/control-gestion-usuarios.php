@@ -5,6 +5,8 @@ include("../inc/utility.php");
 
 if (!validateToken($_POST['token'])) {
     exit;
+} else if (!isLogado()) {
+    exit;
 }
 
 $operacion = limpiarTexto($_POST['operacion'] ?? '');
@@ -20,14 +22,14 @@ switch ($operacion) {
         // control sobre los datos de entrada
         if (empty($nombre)) {
             response('warning', 'Introduce un nombre.');
-        } else if (strlen($nombre) < 3 || strlen($nombre) > 20) {
-            response('warning', 'El nombre debe tener mas de 3 letras y menos de 20.');
+        } else if (strlen($nombre) < 3 || strlen($nombre) > 40) {
+            response('warning', 'El nombre debe tener mas de 3 letras y menos de 40.');
         }
 
         if (empty($apellido)) {
             response('warning', 'Introduce un apellido.');
-        } else if (strlen($apellido) < 3 || strlen($apellido) > 20) {
-            response('warning', 'El apellido debe tener mas de 3 letras y menos de 20.');
+        } else if (strlen($apellido) < 3 || strlen($apellido) > 40) {
+            response('warning', 'El apellido debe tener mas de 3 letras y menos de 40.');
         }
 
         $regex = '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/';
@@ -81,7 +83,7 @@ switch ($operacion) {
             $nivelAcceso = ucfirst($row['rol']) . ' ' . ucfirst($row['tipologia']);
         }
 
-        $arrayResponse = ['nombreApellido' => $nombreCompleto, 'username' => $username, 'email' => $email, 'telefono' => $telefono, 'nivelAcceso' => $nivelAcceso];
+        $arrayResponse = ['nombreApellido' => ucwords($nombreCompleto), 'username' => $username, 'email' => $email, 'telefono' => $telefono, 'nivelAcceso' => $nivelAcceso];
 
         response('success', 'Los datos se actualizaron correctamente', $arrayResponse);
         exit;

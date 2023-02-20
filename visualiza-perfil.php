@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 
 <?php
 include('inc/session.php');
@@ -22,7 +22,7 @@ $_SESSION['token'] = $token_session = getToken(16);
     $sql = "SELECT username, nombre, apellido, email, telefono, tipologia, rol FROM usuario WHERE id = $id_usuario_session;";
     $loop = mysqli_query($dbDentalPro, $sql);
     while ($riga = mysqli_fetch_assoc($loop)) {
-        $nombre = $riga['nombre'];
+        $nombre = $riga["nombre"];
         $apellido = $riga['apellido'];
         $username = $riga['username'];
         $email = $riga['email'];
@@ -30,7 +30,8 @@ $_SESSION['token'] = $token_session = getToken(16);
         $tipologia = $riga['tipologia'];
         $rol = $riga['rol'];
     }
-    $nombreCompleto = ucfirst($nombre) . ' ' . ucfirst($apellido);
+
+    $nombreCompleto = ucwords($nombre) . ' ' . ucwords($apellido);
     $nivelAcceso = ucfirst($rol) . ' ' . ucfirst($tipologia);
     ?>
     <!-- Modal actualizacion de datos -->
@@ -46,33 +47,33 @@ $_SESSION['token'] = $token_session = getToken(16);
                         <div class="row mb-2">
                             <div class="col">
                                 <label for="modal-nombre" class="col-form-label">Nombre:</label>
-                                <input type="text" class="form-control control-input" value=<?php echo ucfirst($nombre) ?> id="modal-nombre">
+                                <input type="text" class="form-control control-input" value="<?php echo $nombre; ?>" id="modal-nombre" >
                                 <small class="form-text">Escribe tu nombre</small>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col">
                                 <label for="modal-apellido" class="col-form-label">Apellido:</label>
-                                <input type="text" class="form-control control-input" value=<?php echo ucfirst($apellido) ?> id="modal-apellido">
+                                <input type="text" class="form-control control-input" value="<?php echo ucwords($apellido) ?>" id="modal-apellido">
                                 <small class="form-text">Escribe tu apellido</small>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col">
                                 <label for="modal-email" class="col-form-label">Email:</label>
-                                <input type="text" class="form-control control-input" value=<?php echo $email ?> id="modal-email">
+                                <input type="text" class="form-control control-input" value="<?php echo $email ?>" id="modal-email">
                                 <small class="form-text">Escribe tu correo</small>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col-6 ">
                                 <label for="modal-username" class="col-form-label">Nombre de usuario:</label>
-                                <input type="text" class="form-control control-input" value=<?php echo $username ?> id="modal-username">
+                                <input type="text" class="form-control control-input" value="<?php echo $username ?>" id="modal-username">
                                 <small class="form-text">Escribe tu nombre de usuario</small>
                             </div>
                             <div class="col-6 ">
                                 <label for="modal-telefono" class="col-form-label">Telefono:</label>
-                                <input type="text" class="form-control control-input" value=<?php echo $telefono ?> id="modal-telefono">
+                                <input type="text" class="form-control control-input" value="<?php echo $telefono ?>"id="modal-telefono">
                                 <small class="form-text">Escribe tu telefono</small>
                             </div>
                         </div>
@@ -134,21 +135,21 @@ $_SESSION['token'] = $token_session = getToken(16);
                         <div class="row mb-2">
                             <div class="col">
                                 <label for="modal-password-actual" class="col-form-label">Password Actual:</label>
-                                <input type="text" class="form-control control-input" id="modal-password-actual">
+                                <input type="text" class="form-control control-input" id="modal-password-actual" value="4765178lp.">
                                 <small class="form-text">Escribe tu contraseña actual</small>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col">
                                 <label for="modal-nueva-password" class="col-form-label">Nueva Password</label>
-                                <input type="text" class="form-control control-input" id="modal-nueva-password">
+                                <input type="text" class="form-control control-input" id="modal-nueva-password" value="4765178lp.">
                                 <small class="form-text">Escribe una nueva contraseña </small>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col">
                                 <label for="modal-confirma-nueva-password" class="col-form-label">Confirma nueva Password</label>
-                                <input type="text" class="form-control control-input" id="modal-confirma-nueva-password">
+                                <input type="text" class="form-control control-input" id="modal-confirma-nueva-password" value="4765178lp.">
                                 <small class="form-text">Confirma tu contraseña nueva</small>
                             </div>
                         </div>
@@ -180,17 +181,6 @@ $_SESSION['token'] = $token_session = getToken(16);
                 aqui la foto
             </div>
             <div class="col-6">
-                <?php
-                $sql = "SELECT username, nombre, apellido, email, telefono, tipologia, rol FROM usuario WHERE id = $id_usuario_session;";
-                $loop = mysqli_query($dbDentalPro, $sql);
-                while ($row = mysqli_fetch_assoc($loop)) {
-                    $username = $row['username'];
-                    $nombreCompleto = ucfirst($row['nombre']) . ' ' . ucfirst($row['apellido']);
-                    $email = $row['email'];
-                    $telefono = $row['telefono'];
-                    $nivelAcceso = ucfirst($row['rol']) . ' ' . ucfirst($row['tipologia']);
-                }
-                ?>
                 <h3 class="text-primary" id="nombre-apellido"><?php echo $nombreCompleto ?></h3>
                 <p class="text-muted fw-normal mb-2" id="nivel-acceso"><?php echo $nivelAcceso ?></p>
                 <hr>
@@ -250,46 +240,46 @@ $_SESSION['token'] = $token_session = getToken(16);
 
         pulsanteGuardarDatos.on("click", function() {
             const token = inputToken.val();
-            const nombre = inputNombre.val();
-            const apellido = inputApellido.val();
-            const email = inputEmail.val();
-            const username = inputUsername.val();
-            const telefono = inputTelefono.val();
+            const nombre = inputNombre.val().trim();
+            const apellido = inputApellido.val().trim();
+            const email = inputEmail.val().trim();
+            const username = inputUsername.val().trim();
+            const telefono = inputTelefono.val().trim();
 
             if (nombre.length == 0) {
-                invalidInput(inputNombre, 'Introduce un nombre');
+                invalidInput([inputNombre], 'Introduce un nombre');
                 return;
-            } else if (nombre.length < 3 || nombre.length > 20) {
-                invalidInput(inputNombre, 'El nombre debe tener mas de 3 letras y menos de 20');
+            } else if (nombre.length < 3 || nombre.length > 40) {
+                invalidInput([inputNombre], 'El nombre debe tener mas de 3 letras y menos de 40');
                 return;
             }
 
             if (apellido.length == 0) {
-                invalidInput(inputApellido, 'Introduce un apellido');
+                invalidInput([inputApellido], 'Introduce un apellido');
                 return;
-            } else if (apellido.length < 3 || apellido.length > 20) {
-                invalidInput(inputApellido, 'El apellido debe tener mas de 3 caracteres y menos de 20');
+            } else if (apellido.length < 3 || apellido.length > 40) {
+                invalidInput([inputApellido], 'El apellido debe tener mas de 3 caracteres y menos de 40');
                 return;
             }
 
             if (email.length == 0) {
-                invalidInput(inputEmail, 'Introduce un email');
+                invalidInput([inputEmail], 'Introduce un email');
                 return;
             } else if (!validateEmail(email)) {
-                invalidInput(inputEmail, 'Introduce un email valido');
+                invalidInput([inputEmail], 'Introduce un email valido');
                 return;
             }
 
             if (username.length == 0) {
-                invalidInput(inputUsername, 'Introduce un nombre de usuario');
+                invalidInput([inputUsername], 'Introduce un nombre de usuario');
                 return;
             } else if (username.length < 5 || username.length > 20) {
-                invalidInput(inputUsername, 'El nombre de usuario debe tener mas de 5 caracteres y menos de 20');
+                invalidInput([inputUsername], 'El nombre de usuario debe tener mas de 5 caracteres y menos de 20');
                 return;
             }
 
             if (telefono.length < 7 && telefono.length != 0) {
-                invalidInput(inputTelefono, 'Introduce un numero valido o deja el campo vacio');
+                invalidInput([inputTelefono], 'Introduce un numero valido o deja el campo vacio');
                 return;
             }
 
@@ -346,9 +336,9 @@ $_SESSION['token'] = $token_session = getToken(16);
         });
 
         pulsanteGuardarPassword.on("click", function() {
-            const tokenPassword = inputTokenPassword.val();
-            const passwordActual = inputPasswordActual.val();
-            const nuevaPassword = inputNuevaPassword.val();
+            const tokenPassword = inputTokenPassword.val().trim();
+            const passwordActual = inputPasswordActual.val().trim();
+            const nuevaPassword = inputNuevaPassword.val().trim();
             const confirmaNuevaPassword = inputConfirmaNuevaPassword.val();
 
             if (!validatePassword(nuevaPassword)) {
@@ -387,23 +377,27 @@ $_SESSION['token'] = $token_session = getToken(16);
                 $.confirm({
                     icon: 'bi bi-check-circle-fill',
                     title: 'Bien hecho!',
-                    content: 'La password se actualizo correctamente',
+                    content: 'La password se actualizo correctamente.<br> Inicia session con tu nueva Pssword',
                     type: 'green',
                     typeAnimated: true,
                     buttons: {
                         ok: {
-                            text: 'Ok',
+                            text: 'Ir al Login',
                             btnClass: 'btn-green',
                             action: function() {
-                                modalCambiarPassword.modal('hide');
+                                //modalCambiarPassword.modal('hide');
+                                $.ajax({
+                                    url: 'control/control-logout.php',
+                                }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                                    message('error', 'No es posible conectarse al servidor <br> Intentalo mas tarde');
+                                    return;
+                                }).done(function(response) {
+                                    window.location.href = 'index.php';
+                                });
                             }
                         }
                     }
                 });
-
-
-
-
             });
         });
     });

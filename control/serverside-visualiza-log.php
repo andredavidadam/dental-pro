@@ -53,7 +53,6 @@ switch ($operacion) {
         );
 
         return;
-        default:
-        //$mensaje = 'operacion no encontrada';
-        error('error');
+    default:
+        response('error', 'operacion inexistente');
 }

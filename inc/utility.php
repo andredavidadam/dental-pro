@@ -60,7 +60,7 @@ abstract class AccessLevel
 
 function limpiarTexto($texto)
 {
-    $textoLimpio = trim(addslashes(htmlentities(($texto))));
+    $textoLimpio = trim(addslashes($texto));
     return $textoLimpio;
 }
 
@@ -113,7 +113,7 @@ function GetIP()
 
 function getToken($num = 64)
 {
-    $token = bin2hex(openssl_random_pseudo_bytes($num));
+    $token = bin2hex(openssl_random_pseudo_bytes($num/2));
     return $token;
 }
 
