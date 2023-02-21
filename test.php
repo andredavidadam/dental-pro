@@ -1,11 +1,10 @@
 <?php
-$test = getGUID();
-var_dump($test);
+$nombre = '             marco                                             aurelio            ';
+$texto=trim(preg_replace('/\s+/', ' ', $nombre));
 
-function getGUID()
-{
-    echo 'ciao';
-    //--- Generar GUID de 32 bytes.
-    usleep(1309);
-    return strtolower(md5(uniqid()));
-}
+
+
+
+
+var_dump($texto);
+

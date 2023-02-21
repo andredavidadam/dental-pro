@@ -58,9 +58,11 @@ abstract class AccessLevel
     }
 }
 
+// esta funcion limpia una cadena de texto eliminando los espacion en exceso
+// sea interno o externo ademas de escapar las comillas
 function limpiarTexto($texto)
 {
-    $textoLimpio = trim(addslashes($texto));
+    $textoLimpio = addslashes(trim(preg_replace('/\s+/', ' ', $texto)));
     return $textoLimpio;
 }
 
@@ -113,7 +115,7 @@ function GetIP()
 
 function getToken($num = 64)
 {
-    $token = bin2hex(openssl_random_pseudo_bytes($num/2));
+    $token = bin2hex(openssl_random_pseudo_bytes($num / 2));
     return $token;
 }
 

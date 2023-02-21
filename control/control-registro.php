@@ -18,14 +18,14 @@ switch ($operacion) {
         // control sobre los datos de entrada
         if (empty($nombre)) {
             response('warning', 'Introduce un nombre.');
-        } else if (strlen($nombre) < 3 || strlen($nombre) > 20) {
-            response('warning', 'El nombre debe tener mas de 3 letras y menos de 20.');
+        } else if (strlen($nombre) < 3 || strlen($nombre) > 40) {
+            response('warning', 'El nombre debe tener mas de 3 letras y menos de 40.');
         }
 
         if (empty($apellido)) {
             response('warning', 'Introduce un apellido.');
-        } else if (strlen($apellido) < 3 || strlen($apellido) > 20) {
-            response('warning', 'El apellido debe tener mas de 3 letras y menos de 20.');
+        } else if (strlen($apellido) < 3 || strlen($apellido) > 40) {
+            response('warning', 'El apellido debe tener mas de 3 letras y menos de 40.');
         }
 
         $regex = '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/';
