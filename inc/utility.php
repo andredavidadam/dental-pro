@@ -197,15 +197,22 @@ function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'index.php', $idC
     }
 }
 
-// funcion que evita el acceso no autorizado a las paginas del control,
+// funcion que evita el acceso no autorizado a las paginas del control
+// si no se inicia sesion o si se envia el token en los formularios 
+// no se permite la operacion
 // sirve para evitar bots y scrapers
-function permisoControl()
+function permisoControl($token)
 {
+    $isValid = false;
     // si la session no es valida no le permito el acceso
     if (!isLogado()) {
         SetLog(Operacion::Backend, 'se intento acceder de forma invalida con una session no iniciada [' . GetIP() . ']');
-        exit;
+    } else if (!validateToken($token)) {
+        SetLog(Operacion::Backend, 'se envio una solicitud sin el token [' . GetIP() . ']');
+    } else {
+        $isValid = true;
     }
+    return $isValid;
 }
 
 // funcion que valida si un usuario inicio sesion o no

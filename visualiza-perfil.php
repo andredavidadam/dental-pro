@@ -13,7 +13,7 @@ if (!isLogado()) {
     goToPage('index.php');
     exit;
 }
-$_SESSION['token'] = $token_session = getToken(16);
+$_SESSION['token'] = $token_session = getToken(32);
 ?>
 <title>Rainweb - perfil</title>
 
@@ -284,7 +284,7 @@ $_SESSION['token'] = $token_session = getToken(16);
             }
 
             $.ajax({
-                url: "control/control-gestion-usuarios.php",
+                url: "control/control-visualiza-perfil.php",
                 type: "POST",
                 data: {
                     "operacion": "actualizarDatos",
@@ -350,7 +350,7 @@ $_SESSION['token'] = $token_session = getToken(16);
             }
 
             $.ajax({
-                url: "control/control-gestion-usuarios.php",
+                url: "control/control-visualiza-perfil.php",
                 type: "POST",
                 data: {
                     "operacion": "actualizarPassword",

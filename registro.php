@@ -8,7 +8,7 @@ include_once("inc/scripts.php");
 include_once("inc/utility.php");
 
 // si el usuario esta logado lo mando al index
-// no es posible registrar un usuario mientras si se inicio sesion
+// no es posible registrar un usuario con la sesion iniciada
 if (isLogado()) {
     goToPage('index.php');
     exit;

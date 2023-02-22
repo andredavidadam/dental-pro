@@ -1,10 +1,3 @@
 <?php
-$nombre = '             marco                                             aurelio            ';
-$texto=trim(preg_replace('/\s+/', ' ', $nombre));
-
-
-
-
-
-var_dump($texto);
-
+$passwordHash = password_hash('4765178lp.', PASSWORD_DEFAULT);
+echo $passwordHash;
