@@ -19,7 +19,7 @@
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" href="visualiza-log.php">Visualiza Log</a></li>
                                     <!-- <hr class="dropdown-divider"> -->
-                                    <li><a class="dropdown-item" href="visualiza-perfil.php">Mi Perfil</a></li>
+                                    <li><a class="dropdown-item" href="gestion-usuarios.php">Gestion Usuarios</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -65,7 +65,7 @@
                 }
                 ?>
         </div>
-    <?php } else { ?>
+    <?php } else { ?> <!-- muestro el menu para quien no esta logado -->
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

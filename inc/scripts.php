@@ -73,6 +73,8 @@
         onAction: function() {}
     };
 
+    // funcion que muestra un mensaje en pantalla
+    // 
     function message(tipo, mensaje) {
         switch (tipo) {
             case 'info':
@@ -172,7 +174,7 @@
         });
     }
 
-    // limpia los campos del formulario
+    // limpia los campos input del formulario
     function cleanForm(input) {
         input.each(function() {
             $(this).val('');

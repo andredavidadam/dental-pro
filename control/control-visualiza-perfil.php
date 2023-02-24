@@ -3,16 +3,12 @@ include("../inc/session.php");
 include("../inc/database.php");
 include("../inc/utility.php");
 
-// 
-if (!permisoControl($_POST['token'])) {
-    goToPage('index.php');
-    exit;
-}
-
 $operacion = limpiarTexto($_POST['operacion'] ?? '');
 
 switch ($operacion) {
     case 'actualizarDatos':
+        permisoControl($_POST['token']);
+
         $nombre = limpiarTexto(strtolower($_POST['nombre'] ?? ''));
         $apellido = limpiarTexto(strtolower($_POST['apellido'] ?? ''));
         $email = limpiarTexto($_POST['email'] ?? '');
@@ -77,17 +73,21 @@ switch ($operacion) {
         $loop = mysqli_query($dbDentalPro, $sql);
         while ($row = mysqli_fetch_assoc($loop)) {
             $username = $row['username'];
-            $nombreCompleto = ucfirst($row['nombre']) . ' ' . ucfirst($row['apellido']);
+            $nombre = ucwords($row['nombre']);
+            $apellido = ucwords($row['apellido']);
             $email = $row['email'];
             $telefono = $row['telefono'];
-            $nivelAcceso = ucfirst($row['rol']) . ' ' . ucfirst($row['tipologia']);
+            $tipologia = ucfirst($row['tipologia']);
+            $rol = ucfirst($row['rol']);
         }
 
-        $arrayResponse = ['nombreApellido' => ucwords($nombreCompleto), 'username' => $username, 'email' => $email, 'telefono' => $telefono, 'nivelAcceso' => $nivelAcceso];
+        $arrayResponse = ['username' => $username, 'nombre' => $nombre, 'apellido' => $apellido, 'email' => $email, 'telefono' => $telefono, 'tipologia' => $tipologia, 'rol' => $rol];
 
         response('success', 'Los datos se actualizaron correctamente', $arrayResponse);
         exit;
     case 'actualizarPassword':
+        permisoControl($_POST['token']);
+
         $passwordActual = limpiarTexto($_POST['passwordActual'] ?? '');
         $nuevaPassword = limpiarTexto($_POST['nuevaPassword'] ?? '');
         $confirmaNuevaPassword = limpiarTexto($_POST['confirmaNuevaPassword'] ?? '');

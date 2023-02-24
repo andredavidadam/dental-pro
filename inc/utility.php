@@ -203,16 +203,16 @@ function permiso($arrayTipologiaPermitida, $urlPermisoNegado = 'index.php', $idC
 // sirve para evitar bots y scrapers
 function permisoControl($token)
 {
-    $isValid = false;
     // si la session no es valida no le permito el acceso
     if (!isLogado()) {
-        SetLog(Operacion::Backend, 'se intento acceder de forma invalida con una session no iniciada [' . GetIP() . ']');
+        SetLog(Operacion::Backend, 'se intento realizar una operacion sin sesion iniciada [' . GetIP() . ']');
+        // goToPage($urlPermisoNegado);
+        exit;
     } else if (!validateToken($token)) {
         SetLog(Operacion::Backend, 'se envio una solicitud sin el token [' . GetIP() . ']');
-    } else {
-        $isValid = true;
+        // goToPage($urlPermisoNegado);
+        exit;
     }
-    return $isValid;
 }
 
 // funcion que valida si un usuario inicio sesion o no

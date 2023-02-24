@@ -21,14 +21,14 @@ $_SESSION['token'] = $token_session = getToken(32);
     <?php
     $sql = "SELECT username, nombre, apellido, email, telefono, tipologia, rol FROM usuario WHERE id = $id_usuario_session;";
     $loop = mysqli_query($dbDentalPro, $sql);
-    while ($riga = mysqli_fetch_assoc($loop)) {
-        $nombre = $riga["nombre"];
-        $apellido = $riga['apellido'];
-        $username = $riga['username'];
-        $email = $riga['email'];
-        $telefono = $riga['telefono'];
-        $tipologia = $riga['tipologia'];
-        $rol = $riga['rol'];
+    while ($row = mysqli_fetch_assoc($loop)) {
+        $nombre = ($row["nombre"]);
+        $apellido = $row['apellido'];
+        $username = $row['username'];
+        $email = $row['email'];
+        $telefono = $row['telefono'];
+        $tipologia = $row['tipologia'];
+        $rol = $row['rol'];
     }
 
     $nombreCompleto = ucwords($nombre) . ' ' . ucwords($apellido);
@@ -47,7 +47,7 @@ $_SESSION['token'] = $token_session = getToken(32);
                         <div class="row mb-2">
                             <div class="col">
                                 <label for="modal-nombre" class="col-form-label">Nombre:</label>
-                                <input type="text" class="form-control control-input" value="<?php echo $nombre; ?>" id="modal-nombre" >
+                                <input type="text" class="form-control control-input" value="<?php echo ucwords($nombre); ?>" id="modal-nombre">
                                 <small class="form-text">Escribe tu nombre</small>
                             </div>
                         </div>
@@ -73,7 +73,7 @@ $_SESSION['token'] = $token_session = getToken(32);
                             </div>
                             <div class="col-6 ">
                                 <label for="modal-telefono" class="col-form-label">Telefono:</label>
-                                <input type="text" class="form-control control-input" value="<?php echo $telefono ?>"id="modal-telefono">
+                                <input type="text" class="form-control control-input" value="<?php echo $telefono ?>" id="modal-telefono">
                                 <small class="form-text">Escribe tu telefono</small>
                             </div>
                         </div>
@@ -198,6 +198,7 @@ $_SESSION['token'] = $token_session = getToken(32);
                 </div>
             </div>
         </div>
+    </div>
 </body>
 <script>
     $(document).ready(function() {
@@ -322,11 +323,17 @@ $_SESSION['token'] = $token_session = getToken(32);
                             btnClass: 'btn-green',
                             action: function() {
                                 modalCambiarDatos.modal('hide');
-                                $("#nombre-apellido").text(json['datos']['nombreApellido']);
-                                $("#nivel-acceso").text(json['datos']['nivelAcceso']);
+                                $("#nombre-apellido").text(json['datos']['nombre'] + ' ' + json['datos']['apellido']);
+                                $("#nivel-acceso").text(json['datos']['rol'] + ' ' + json['datos']['tipologia']);
                                 $("#username").text(json['datos']['username']);
                                 $("#email").text(json['datos']['email']);
                                 $("#telefono").text(json['datos']['telefono']);
+
+                                $("#modal-nombre").val(json['datos']['nombre']);
+                                $("#modal-apellido").val(json['datos']['apellido']);
+                                $("#modal-email").val(json['datos']['email']);
+                                $("#modal-username").val(json['datos']['username']);
+                                $("#modal-telefono").val(json['datos']['telefono']);
                             }
                         }
                     }
