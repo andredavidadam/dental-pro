@@ -58,12 +58,15 @@ abstract class AccessLevel
     }
 }
 
-// esta funcion limpia una cadena de texto eliminando los espacion en exceso
-// sea interno o externo ademas de escapar las comillas
+// el orden de la limpieza de la cadena es muy importante
 function limpiarTexto($texto)
 {
-    $textoLimpio = addslashes(trim(preg_replace('/\s+/', ' ', $texto)));
-    return $textoLimpio;
+    $texto = preg_replace('/<script>.*<\/script>/isx', '', $texto); // elimina cualquier cosa que este dentro las etiquetas de apertura y cierre de javascript
+    $texto = strip_tags($texto); // elimina las etiquetas html de la cadena
+    $texto = str_replace(['#', '--', '\\'], '', $texto); // elimina los caracteres de inicio de un comentario en mysql y las barras invertidas
+    $texto = preg_replace('/\s\s+/', ' ', $texto); // reemplaza si hay mas de 2+ espacios entre palabras en el texto por un espacio
+    $texto = trim($texto); // reemplaza los espacios al inicio y al final de una cadena
+    return $texto;
 }
 
 // envia un mensaje desde el control con la respuesta
